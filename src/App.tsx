@@ -328,6 +328,10 @@ Sertakan 10 Lampiran lengkap: LKPD, Rubrik, Kisi-kisi Bloom, Kartu Soal, Cetak S
       // Generate fully high-fidelity complete structural plan matching form inputs
       const resultModule = generateMockLessonPlan(school, subject, design);
       
+      if (data.success && data.text) {
+        resultModule.lampiranRingkasanMateriDetail = data.text;
+      }
+      
       const updatedModules = [resultModule, ...modules];
       setModules(updatedModules);
       setSelectedModule(resultModule);
