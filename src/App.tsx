@@ -448,7 +448,7 @@ Output harus menyajikan:
 
    PENTING UNTUK KEGIATAN INTI:
    Di dalam bagian Kegiatan Inti, Anda DILARANG KERAS menuliskan satu baris ringkasan umum seperti "Siswa berkolaborasi melakukan investigasi, mengumpulkan data, berdiskusi, dan merancang solusi/projek sesuai sintaks model...".
-   Sebaliknya, Anda WAJIB menjabarkan setiap langkah/sintaks operasional dari Model Pembelajaran yang dipilih ("${design.modelPembelajaran}") secara rinci, berurutan, dan terperinci dari awal sampai akhir (misal untuk PjBL: mulai dari Penentuan Pertanyaan Mendasar, Mendesain Perencanaan Projek, Menyusun Jadwal, Memonitor Keberajuan, Menguji Hasil, hingga Evaluasi Pengalaman; untuk PBL: Orientasi Masalah, Mengorganisasi Belajar, Membimbing Penyelidikan, Mengembangkan & Menyajikan Hasil Karya, hingga Analisis & Evaluasi). Jelaskan apa yang dilakukan guru dan apa yang dilakukan siswa pada tiap tahapan tersebut secara konkret dan mendalam!
+   Sebaliknya, Anda WAJIB menjabarkan setiap langkah/sintaks operasional dari Model Pembelajaran yang dipilih ("${design.modelPembelajaran}") secara rinci, berurutan, dan terperinci dari awal sampai akhir (misal untuk PjBL: mulai dari Penentuan Pertanyaan Mendasar (tambahkan detail pertanyaannya sesuai materi pokok, misal "Seberapa penting mengenal karbohidrat dan serat?"), Mendesain Perencanaan Projek (jelaskan dengan detail seusai dengan materi pokok, misal rencana membuat mading 3d tentang kandungan gizi makanan), Menyusun Jadwal (jabarkan dengan sangat detail, misalnya perumusan masalah dalam 5 menit atau 1 x jam pelajaran bila rumit, dan seterusnya), Memonitor Keberajuan (jelaskan bagaimana cara, rentang waktu, dan lini masanya), Menguji Hasil (tuliskan cara pengujiannya dan cara pengumpulan umpan balik), hingga Evaluasi Pengalaman (tulis cara melakukan evaluasi pengalaman, misalnya dengan angket); untuk PBL: Orientasi Masalah, Mengorganisasi Belajar, Membimbing Penyelidikan, Mengembangkan & Menyajikan Hasil Karya, hingga Analisis & Evaluasi). Jelaskan apa yang dilakukan guru dan apa yang dilakukan siswa pada tiap tahapan tersebut secara konkret dan mendalam!
 
    PENTING UNTUK KEGIATAN PENUTUP / AKHIR:
    Kegiatan akhir WAJIB mencakup komponen operasional berikut secara terperinci:
@@ -458,7 +458,7 @@ Output harus menyajikan:
 
    PENTING UNTUK INSTRUMEN EVALUASI & 10 SOAL:
    - Evaluasi harian harus mencakup tepat 10 butir soal asesmen sumatif yang terdiri dari:
-     - 5 soal Pilihan Ganda dengan 4 opsi (A, B, C, D)
+     - 5 soal Pilihan Ganda dengan 4 opsi (A, B, C, D), semua opsi harus ada isinya tidak boleh ditulis "Opsi Jawaban B"
      - 3 soal Isian Pendek (Isian Singkat)
      - 2 soal Uraian / Esai
    - Pastikan rincian soal, kunci jawaban, kisi-kisi, dan kartu soal untuk ke-10 butir soal ini dijabarkan secara utuh, konkret, lengkap, dan berkorelasi penuh dengan materi pokok "${design.materiPokok || "ini"}". Jangan diringkas atau dikurangi jumlahnya!
