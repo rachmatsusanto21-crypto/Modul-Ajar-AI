@@ -13,6 +13,7 @@ interface DesignFormProps {
   theme: "light" | "dark";
   selectedProvider: string;
   setSelectedProvider: (provider: string) => void;
+  currentUserEmail?: string;
 }
 
 export default function DesignForm({
@@ -24,7 +25,8 @@ export default function DesignForm({
   generating,
   theme,
   selectedProvider,
-  setSelectedProvider
+  setSelectedProvider,
+  currentUserEmail
 }: DesignFormProps) {
   const cardBg = theme === "dark" ? "bg-slate-900/60 border-slate-800" : "bg-white border-slate-200/80 shadow-sm";
   const labelColor = theme === "dark" ? "text-slate-300" : "text-slate-600";
@@ -214,17 +216,26 @@ export default function DesignForm({
           <label className="block text-[10px] font-bold text-slate-400 mb-1">
             Penyedia Layanan AI (Auto-switch Aktif)
           </label>
-          <select
-            value={selectedProvider}
-            onChange={(e) => setSelectedProvider(e.target.value)}
-            className={`w-full sm:w-60 px-2 py-1.5 text-xs rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border ${
-              theme === "dark" ? "bg-slate-900 border-slate-800 text-slate-100" : "bg-white border-slate-200 text-slate-800"
-            }`}
-          >
-            {aiProviders.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <select
+              value={selectedProvider}
+              onChange={(e) => setSelectedProvider(e.target.value)}
+              className={`w-full sm:w-60 px-2 py-1.5 text-xs rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 border ${
+                theme === "dark" ? "bg-slate-900 border-slate-800 text-slate-100" : "bg-white border-slate-200 text-slate-800"
+              }`}
+            >
+              {aiProviders.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+            
+            {currentUserEmail && (
+              <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-2.5 py-1.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-sans">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Gemini terhubung: <strong>{currentUserEmail}</strong></span>
+              </div>
+            )}
+          </div>
           <p className="text-[9px] text-slate-400 mt-1 font-sans">
-            *Apabila kuota habis, sistem akan otomatis beralih ke cadangan gratis tanpa menghentikan penyusunan.
+            *Menggunakan data rujukan konseptual aplikasi untuk menghasilkan generate yang sangat presisi sesuai materi pembelajaran.
           </p>
         </div>
 

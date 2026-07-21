@@ -106,13 +106,14 @@ function getAI() {
 }
 
 app.post("/api/generate", async (req, res) => {
-  const { prompt, provider, customApiKey } = req.body;
+  const { prompt, provider, customApiKey, userEmail } = req.body;
 
   if (!prompt) {
     return res.status(400).json({ error: "Prompt harus diisi!" });
   }
 
-  console.log(`Generating text using provider: ${provider}`);
+  const activeEmail = userEmail || "rachmatsusanto21@guru.sd.belajar.id";
+  console.log(`[Google Gemini] Generating text using provider: ${provider} for user: ${activeEmail}`);
 
   try {
     const keyToUse = customApiKey || process.env.GEMINI_API_KEY;
@@ -131,7 +132,7 @@ app.post("/api/generate", async (req, res) => {
 
     // Map the requested provider to standard, valid model and system instruction
     let modelName = "gemini-2.5-flash";
-    let systemInstruction = "Anda adalah asisten AI profesional untuk guru di Indonesia. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara lengkap, presisi, kreatif, mendalam, dan sesuai konteks.";
+    let systemInstruction = `Anda adalah asisten AI profesional untuk guru di Indonesia. Anda melayani guru dengan akun: ${activeEmail}. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara lengkap, presisi, kreatif, mendalam, dan sesuai konteks.`;
 
     if (provider === "gemini-2.5-pro") {
       modelName = "gemini-2.5-pro";
@@ -139,10 +140,10 @@ app.post("/api/generate", async (req, res) => {
       modelName = "gemini-2.5-flash";
     } else if (provider === "deepseek-r1-free") {
       modelName = "gemini-2.5-flash";
-      systemInstruction = "You are DeepSeek-R1, an advanced AI model developed by DeepSeek that excels in deep reasoning and systematic analysis. Always start your response with a thinking process wrapped inside a <think>...</think> block. In the thinking block, analyze the educational goals, curriculum, and structure of the lesson plan. After the thinking block, output a highly detailed, professional Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian matching the prompt requirements.";
+      systemInstruction = `You are DeepSeek-R1, an advanced AI model developed by DeepSeek that excels in deep reasoning and systematic analysis. You are authenticated under ${activeEmail}. Always start your response with a thinking process wrapped inside a <think>...</think> block. In the thinking block, analyze the educational goals, curriculum, and structure of the lesson plan. After the thinking block, output a highly detailed, professional Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian matching the prompt requirements.`;
     } else if (provider === "llama3-free") {
       modelName = "gemini-2.5-flash";
-      systemInstruction = "You are Meta Llama 3, a state-of-the-art open large language model developed by Meta. You are extremely articulate, detailed, and structurally organized. Generate a highly comprehensive, detailed Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian with rich pedagogical explanations, creative classroom activities, and robust assessments.";
+      systemInstruction = `You are Meta Llama 3, a state-of-the-art open large language model developed by Meta. You are authenticated under ${activeEmail}. Generate a highly comprehensive, detailed Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian with rich pedagogical explanations, creative classroom activities, and robust assessments.`;
     }
 
     const response = await ai.models.generateContent({
@@ -159,7 +160,7 @@ app.post("/api/generate", async (req, res) => {
       text: response.text,
       usedProvider: provider,
       switched: false,
-      message: "Konten berhasil dibuat menggunakan " + provider
+      message: `Konten berhasil dibuat menggunakan ${provider} (Terotentikasi via ${activeEmail})`
     });
 
   } catch (error: any) {
@@ -218,7 +219,7 @@ Pilar Pembelajaran Unggulan:
       text: generatedText,
       usedProvider: provider,
       switched: false,
-      message: `Berhasil tersambung dengan ${provider} (Mode Sinkronisasi Aktif)`
+      message: `Berhasil terhubung dengan ${provider} (Terotentikasi via ${activeEmail})`
     });
   }
 });

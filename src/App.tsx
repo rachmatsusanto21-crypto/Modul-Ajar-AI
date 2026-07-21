@@ -292,19 +292,53 @@ export default function App() {
     setGenerating(true);
     addDriveLog("Memulai analisis parameter pedagogis dan kurikulum...");
 
-    // Build perfect prompt as target
+    // Build perfect prompt as target with all input reference data (data acuan)
     const targetPrompt = `
-Buatkan modul ajar / RPP lengkap Bahasa Indonesia untuk:
-Sekolah: ${school.namaSekolah}
-Kurikulum: ${school.kurikulum}
-Jenjang/Kelas/Semester: ${school.jenjang} / Kelas ${school.kelas} / Semester ${school.semester}
-Mata Pelajaran: ${subject.namaMataPelajaran}
-Materi Pokok: ${design.materiPokok}
-Pendekatan: ${design.pendekatan}
-Model: ${design.modelPembelajaran}
-Alokasi Waktu: ${subject.jamPelajaran}
+Buatlah Modul Ajar / RPP Kurikulum Merdeka yang sangat lengkap, komprehensif, mendalam, dan disesuaikan secara dinamis berdasarkan data acuan resmi berikut:
 
-Sertakan 10 Lampiran lengkap: LKPD, Rubrik, Kisi-kisi Bloom, Kartu Soal, Cetak Soal, Umpan balik, Portofolio, Presentasi, Lembar Penilaian Siswa, Ringkasan materi.
+==================================================
+1. IDENTITAS SEKOLAH & PROFIL GURU (DATA ACUAN):
+==================================================
+- Nama Sekolah: ${school.namaSekolah}
+- Kurikulum: ${school.kurikulum}
+- Jenjang / Kelas / Semester: ${school.jenjang} / Kelas ${school.kelas} / Semester ${school.semester} (${school.fase})
+- Tahun Pelajaran: ${school.tahunPelajaran}
+- Jumlah Siswa: ${school.jumlahSiswa} Siswa
+- Kota Pembuatan: ${school.namaKota}
+- Tanggal Pembuatan: ${school.tanggalPembuatan}
+- Nama Guru: ${school.namaGuru} (NIP: ${school.nipGuru})
+- Kepala Sekolah: ${school.namaKepalaSekolah} (NIP: ${school.nipKepalaSekolah})
+
+==================================================
+2. IDENTITAS MATA PELAJARAN (DATA ACUAN):
+==================================================
+- Mata Pelajaran: ${subject.namaMataPelajaran}
+- Alokasi Waktu: ${subject.jamPelajaran} (Durasi per jam pelajaran: ${subject.durasiJamPelajaran} menit)
+
+==================================================
+3. PARAMETER DESAIN PEMBELAJARAN (DATA ACUAN UTAMA):
+==================================================
+- Capaian Pembelajaran (CP): ${design.capaianPembelajaran || "Disesuaikan otomatis secara teoretis"}
+- Elemen Capaian: ${design.elemenCapaian || "Disesuaikan otomatis secara teoretis"}
+- Tujuan Pembelajaran (TP): ${design.tujuanPembelajaran || "Disesuaikan otomatis secara teoretis"}
+- Materi Pokok Pembelajaran: ${design.materiPokok || "Disesuaikan otomatis secara teoretis"}
+- Pendekatan Pedagogi: ${design.pendekatan}
+- Model Pembelajaran: ${design.modelPembelajaran}
+- Cara Penilaian & Evaluasi: ${design.caraPenilaian || "Disesuaikan otomatis secara teoretis"}
+- Media Pembelajaran: ${design.mediaBelajar || "Disesuaikan otomatis secara teoretis"}
+- Sumber Belajar: ${design.sumberBelajar || "Disesuaikan otomatis secara teoretis"}
+- Instruksi Kegiatan Khusus / Kustom: ${design.promptKegiatan || "Rancang kegiatan kelompok kreatif interaktif"}
+
+==================================================
+TUGAS AI & OUTPUT MANDATE:
+==================================================
+Gunakan seluruh data acuan di atas sebagai basis utama untuk memproses konten pembelajaran. 
+Output harus menyajikan:
+1. Ringkasan materi pokok esensial secara detail sesuai Kurikulum Merdeka.
+2. Skenario langkah-langkah pembelajaran (Pembuka, Inti, Penutup) yang memanfaatkan Pendekatan "${design.pendekatan}" dan Model "${design.modelPembelajaran}".
+3. Uraian 10 Lampiran Lengkap (LKPD Mandiri/Kelompok, Rubrik Penilaian Sikap/Keterampilan/Pengetahuan, Kisi-kisi Asesmen Bloom, Kartu Soal, Contoh Soal Ujian Cetak, Umpan Balik Siswa, Rencana Portofolio, Panduan Presentasi, Lembar Penilaian Siswa, dan Ringkasan Materi Pendalam).
+
+Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indonesia serta relevan dengan perkembangan kognitif siswa Kelas ${school.kelas}.
     `;
 
     try {
@@ -314,7 +348,8 @@ Sertakan 10 Lampiran lengkap: LKPD, Rubrik, Kisi-kisi Bloom, Kartu Soal, Cetak S
         body: JSON.stringify({
           prompt: targetPrompt,
           provider: settings.apiProvider,
-          customApiKey: settings.customApiKey
+          customApiKey: settings.customApiKey,
+          userEmail: currentUser?.email
         })
       });
 
@@ -570,6 +605,7 @@ Sertakan 10 Lampiran lengkap: LKPD, Rubrik, Kisi-kisi Bloom, Kartu Soal, Cetak S
               theme={settings.theme}
               selectedProvider={settings.apiProvider}
               setSelectedProvider={(provider) => setSettings(prev => ({ ...prev, apiProvider: provider }))}
+              currentUserEmail={currentUser?.email}
             />
           </div>
 
