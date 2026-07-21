@@ -121,6 +121,42 @@ Referensi & Daftar Rujukan:
 4. Website Portal Rumah Belajar Kemdikbud (https://belajar.kemdikbud.go.id) - Modul Simulasi Interaktif Materi Esensial.
   `.trim();
 
+  // Detail step-by-step syntax implementation based on selected learning model
+  let detailedSteps = "";
+  if (design.modelPembelajaran === "PjBL") {
+    detailedSteps = `   a. Tahap 1 (Penentuan Pertanyaan Mendasar): Guru mengajukan masalah kontekstual mengenai "${design.materiPokok || "materi pokok"}". Siswa menganalisis isu tersebut dan merumuskan pertanyaan mendasar yang memicu rasa ingin tahu untuk dirancang solusinya.
+   b. Tahap 2 (Mendesain Perencanaan Projek): Siswa berkolaborasi dalam kelompok heterogen merancang rencana kerja pembuatan projek/solusi. Mereka merencanakan aturan main kelompok, pembagian tugas, alat/bahan pendukung (seperti "${design.mediaBelajar || "alat peraga sederhana"}"), dan langkah-langkah penyelesaian projek.
+   c. Tahap 3 (Menyusun Jadwal Pembuatan): Siswa secara kritis berdiskusi menyusun garis waktu (timeline) pengerjaan projek secara detail, menetapkan batas akhir pengerjaan, serta pembagian target capaian harian kelompok di bawah bimbingan guru.
+   d. Tahap 4 (Memonitor Keberajuan Projek): Siswa aktif membuat projek atau melaksanakan investigasi mendalam sesuai jadwal yang disepakati. Guru berkeliling melakukan pemantauan intensif, membimbing penyelesaian kendala teknis, serta memastikan semua siswa berpartisipasi aktif.
+   e. Tahap 5 (Menguji Hasil): Kelompok melakukan uji coba akhir terhadap projek/karya yang telah diselesaikan untuk mengukur kelayakan fungsinya. Guru memantau unjuk kerja siswa dan mencatat hasil evaluasi produk sebagai dasar penilaian ketercapaian kompetensi.
+   f. Tahap 6 (Evaluasi Pengalaman Belajar): Setiap kelompok menyajikan dan mendemonstrasikan hasil karya projek mereka di hadapan kelas secara komunikatif. Siswa kelompok lain menyimak dengan saksama dan memberikan masukan konstruktif. Guru memberikan penguatan konsep esensial serta merefleksikan seluruh proses pembuatan projek bersama siswa.`;
+  } else if (design.modelPembelajaran === "PBL") {
+    detailedSteps = `   a. Tahap 1 (Orientasi Siswa pada Masalah): Guru mempresentasikan kasus nyata dan menantang (ill-structured problem) yang terjadi di kehidupan sehari-hari terkait "${design.materiPokok || "materi pokok"}". Siswa mengamati, merumuskan pertanyaan kunci, serta menetapkan fokus masalah yang perlu dipecahkan berkelompok.
+   b. Tahap 2 (Mengorganisasi Siswa untuk Belajar): Siswa bergabung dalam kelompok heterogen. Guru membagikan LKPD, mendefinisikan tugas belajar secara spesifik, membimbing pembagian peran anggota kelompok, dan menyepakati rujukan pemecahan masalah.
+   c. Tahap 3 (Membimbing Penyelidikan Individu/Kelompok): Siswa melakukan investigasi mendalam, mencari informasi rujukan dari "${design.sumberBelajar || "buku pelajaran dan bahan ajar digital"}", mengumpulkan data hasil eksperimen/observasi, dan mendiskusikannya secara kritis dengan anggota kelompok untuk merumuskan draf solusi.
+   d. Tahap 4 (Mengembangkan dan Menyajikan Hasil Karya): Siswa menyatukan data hasil penyelidikan untuk merumuskan solusi terbaik. Mereka menuangkannya ke dalam laporan terstruktur, peta konsep, atau poster visual, lalu mempresentasikan hasil karyanya di depan kelas secara percaya diri.
+   e. Tahap 5 (Menganalisis & Mengevaluasi Proses): Kelompok lain menanyakan hal baru, menanggapi, atau menyempurnakan solusi yang ditawarkan. Guru mengonfirmasi kebenaran konsep ilmiah, meluruskan miskonsepsi, mereview langkah-langkah pemecahan masalah, dan memberikan umpan balik evaluatif.`;
+  } else if (design.modelPembelajaran === "Discovery") {
+    detailedSteps = `   a. Tahap 1 (Pemberian Rangsangan / Stimulation): Guru memberikan stimulus visual berupa gambar, demonstrasi eksperimen menarik, atau benda nyata mengenai "${design.materiPokok || "topik materi"}" tanpa penjelasan awal untuk memicu rasa ingin tahu mendalam.
+   b. Tahap 2 (Identifikasi Masalah / Problem Statement): Siswa mengidentifikasi sebanyak mungkin pertanyaan atau celah informasi dari stimulus tersebut, lalu memilih satu atau beberapa masalah utama untuk dirumuskan dalam bentuk hipotesis dugaan ilmiah sementara.
+   c. Tahap 3 (Pengumpulan Data / Data Collection): Siswa melakukan eksplorasi langsung, melakukan eksperimen sederhana, atau mengamati objek rujukan konseptual menggunakan "${design.mediaBelajar || "alat bantu pembelajaran"}" untuk mengumpulkan bukti-bukti empiris pendukung hipotesis.
+   d. Tahap 4 (Pengolahan Data / Data Processing): Siswa mengolah data hasil eksperimen/pengamatan, mendiskusikannya secara kolaboratif dalam kelompok, dan menuangkannya ke dalam tabel pengamatan di LKPD.
+   e. Tahap 5 (Pembuktian / Verification): Siswa melakukan verifikasi ilmiah dengan membandingkan temuan data mereka dengan teori resmi yang ada pada "${design.sumberBelajar || "buku rujukan"}". Guru memandu diskusi untuk menyamakan persepsi sains/konseptual.
+   f. Tahap 6 (Menarik Kesimpulan / Generalization): Siswa memformulasikan prinsip umum hasil penemuan mandiri mereka dan mempresentasikan kesimpulan tersebut secara klasikal di depan kelas.`;
+  } else if (design.modelPembelajaran === "Inquiry") {
+    detailedSteps = `   a. Tahap 1 (Orientasi Masalah & Merumuskan Pertanyaan): Guru memandu pengamatan fenomena unik terkait "${design.materiPokok || "konsep materi"}". Siswa mengamati secara saksama lalu mengajukan pertanyaan penyelidikan mandiri yang menuntut jawaban eksploratif.
+   b. Tahap 2 (Merumuskan Hipotesis): Siswa secara kolaboratif menyusun draf dugaan teoretis sementara (hipotesis) atas pertanyaan yang diajukan dengan menggunakan logika berpikir rasional.
+   c. Tahap 3 (Mengumpulkan Data): Siswa merancang langkah investigasi empiris, mengisi lembar pengamatan, dan mengumpulkan data kuantitatif maupun kualitatif melalui eksperimen terkontrol atau studi literatur.
+   d. Tahap 4 (Menguji Hipotesis): Siswa menganalisis keabsahan data hasil penyelidikan, membandingkan data empiris dengan dugaan awal mereka secara kritis untuk membuktikan keabsahan hipotesis tersebut.
+   e. Tahap 5 (Merumuskan Kesimpulan & Refleksi): Siswa menarik kesimpulan akhir, mempresentasikan hasil temuan mereka secara ilmiah di hadapan guru dan rekan sekelas, serta melakukan refleksi atas kualitas proses penyelidikan ilmiah yang telah dilewati.`;
+  } else {
+    detailedSteps = `   a. Tahap 1 (Penyampaian Tujuan & Motivasi): Guru memaparkan tujuan pembelajaran dan materi "${design.materiPokok || "materi pelajaran"}" serta memotivasi siswa tentang manfaatnya dalam kehidupan nyata sehari-hari.
+   b. Tahap 2 (Menyajikan Informasi Awal): Guru mendemonstrasikan konsep, memaparkan contoh kasus konkret, dan membimbing pemahaman konsep dasar secara klasikal.
+   c. Tahap 3 (Mengorganisasikan Belajar): Siswa bergabung dalam kelompok kerja heterogen. Guru membagikan LKPD dan menginstruksikan tata cara kolaborasi pengerjaan tugas bersama.
+   d. Tahap 4 (Membimbing Kerja Kelompok): Siswa berkolaborasi mengkaji bahan rujukan, bertukar pemikiran, menyelesaikan tantangan di LKPD, dan menyusun peta solusi bersama kelompok. Guru membimbing kelompok yang memerlukan penanganan khusus.
+   e. Tahap 5 (Evaluasi dan Presentasi): Kelompok mempresentasikan hasil diskusi mereka. Guru memandu jalannya tanya jawab, meluruskan miskonsepsi, dan mengevaluasi kedalaman pemahaman siswa.`;
+  }
+
   return {
     id,
     title: `Modul Ajar - ${primarySubject} Kelas ${school.kelas} - ${design.materiPokok}`,
@@ -153,7 +189,8 @@ Referensi & Daftar Rujukan:
         sintaks: `${sintaksAwal} s/d ${sintaksInti2}`,
         kegiatan: `1. Klasikal: Guru menyajikan multimedia/benda asli/simulasi digital interaktif mengenai materi pokok. Siswa menyimak penjelasan awal secara interaktif.
 2. Kelompok: Siswa dibagi dalam kelompok heterogen beranggotakan 4-5 orang. Guru membagikan LKPD (Lembar Kerja Peserta Didik) Projek/Masalah.
-3. Siswa berkolaborasi melakukan investigasi mendalam, mengumpulkan data, berdiskusi, dan merancang solusi/projek sesuai sintaks model pembelajaran "${design.modelPembelajaran}".
+3. Penerapan Sintaks Model Pembelajaran "${design.modelPembelajaran}" Secara Terperinci:
+${detailedSteps}
 4. Individu: Guru melakukan bimbingan intensif personal, memastikan setiap siswa dalam kelompok aktif berpartisipasi dan memahami perannya.
 5. Guru menerapkan strategi pembelajaran berdiferensiasi proses: memberikan pendampingan khusus bagi siswa berkebutuhan/lambat belajar, serta pengayaan bagi siswa cepat belajar.`,
         alokasiWaktu: waktuInti,

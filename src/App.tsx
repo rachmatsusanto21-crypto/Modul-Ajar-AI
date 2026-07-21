@@ -87,6 +87,7 @@ export default function App() {
   const [savingToDocs, setSavingToDocs] = useState(false);
   const [exportingThirdParty, setExportingThirdParty] = useState(false);
   const [driveLogs, setDriveLogs] = useState<string[]>([]);
+  const [quotaNotice, setQuotaNotice] = useState<string | null>(null);
   
   // Login modal & Add User modal states
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -336,6 +337,10 @@ Gunakan seluruh data acuan di atas sebagai basis utama untuk memproses konten pe
 Output harus menyajikan:
 1. Ringkasan materi pokok esensial secara detail sesuai Kurikulum Merdeka.
 2. Skenario langkah-langkah pembelajaran (Pembuka, Inti, Penutup) yang memanfaatkan Pendekatan "${design.pendekatan}" dan Model "${design.modelPembelajaran}".
+
+   PENTING: Di dalam bagian Kegiatan Inti, Anda DILARANG KERAS menuliskan satu baris ringkasan umum seperti "Siswa berkolaborasi melakukan investigasi, mengumpulkan data, berdiskusi, dan merancang solusi/projek sesuai sintaks model...".
+   Sebaliknya, Anda WAJIB menjabarkan setiap langkah/sintaks operasional dari Model Pembelajaran yang dipilih ("${design.modelPembelajaran}") secara rinci, berurutan, dan terperinci dari awal sampai akhir (misal untuk PjBL: mulai dari Penentuan Pertanyaan Mendasar, Mendesain Perencanaan Projek, Menyusun Jadwal, Memonitor Keberajuan, Menguji Hasil, hingga Evaluasi Pengalaman; untuk PBL: Orientasi Masalah, Mengorganisasi Belajar, Membimbing Penyelidikan, Mengembangkan & Menyajikan Hasil Karya, hingga Analisis & Evaluasi). Jelaskan apa yang dilakukan guru dan apa yang dilakukan siswa pada tiap tahapan tersebut secara konkret dan mendalam!
+
 3. Uraian 10 Lampiran Lengkap (LKPD Mandiri/Kelompok, Rubrik Penilaian Sikap/Keterampilan/Pengetahuan, Kisi-kisi Asesmen Bloom, Kartu Soal, Contoh Soal Ujian Cetak, Umpan Balik Siswa, Rencana Portofolio, Panduan Presentasi, Lembar Penilaian Siswa, dan Ringkasan Materi Pendalam).
 
 Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indonesia serta relevan dengan perkembangan kognitif siswa Kelas ${school.kelas}.
@@ -358,6 +363,14 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
       // Auto-switch notice if switched
       if (data.switched) {
         addDriveLog(data.message);
+      }
+
+      if (data.quotaExceeded) {
+        setQuotaNotice(
+          `Batas kuota harian/menit untuk penyedia AI "${settings.apiProvider}" telah terlampaui pada akun platform atau batas kunci API. Sistem secara otomatis beralih menggunakan akselerator kurikulum lokal yang dioptimalkan sesuai data acuan Anda agar RPP tetap selesai dengan struktur sempurna. Jika Anda ingin menghindari limitasi ini, Anda dapat memasukkan "Kunci API Gemini Kustom" Anda sendiri secara gratis yang dapat dibuat di konsol Google AI Studio.`
+        );
+      } else {
+        setQuotaNotice(null);
       }
 
       // Generate fully high-fidelity complete structural plan matching form inputs
@@ -567,6 +580,37 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
 
         {/* WORKSPACE AREA */}
         <div className="flex-1 p-4 lg:p-6 overflow-y-auto space-y-6">
+          
+          {quotaNotice && (
+            <div className="bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 p-4 rounded-xl text-xs space-y-2 relative overflow-hidden font-sans">
+              <div className="absolute right-0 top-0 translate-x-2 -translate-y-2 text-amber-500/5 select-none pointer-events-none">
+                <Sparkles size={80} />
+              </div>
+              <div className="flex items-center gap-2 font-bold">
+                <AlertCircle size={16} className="text-amber-500" />
+                <span>Informasi Batasan Kuota Gemini AI</span>
+              </div>
+              <p className="leading-relaxed">
+                {quotaNotice}
+              </p>
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <a
+                  href="https://aistudio.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1 rounded-md font-bold transition text-[10px]"
+                >
+                  Dapatkan API Key Gratis Baru
+                </a>
+                <button
+                  onClick={() => setQuotaNotice(null)}
+                  className="text-slate-400 hover:text-slate-200 transition text-[10px] underline"
+                >
+                  Tutup Notifikasi
+                </button>
+              </div>
+            </div>
+          )}
           
           {/* STEP 1 & 2: INPUT FORMS SECTION */}
           <div className="space-y-4">
