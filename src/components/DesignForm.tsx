@@ -51,6 +51,8 @@ export default function DesignForm({
   };
 
   const aiProviders = [
+    { id: "gemini-3.5-flash", name: "Gemini 3.5 Flash (Gratis - Rekomendasi Prompt Rumit)" },
+    { id: "claude-3.5-sonnet", name: "Claude 3.5 Sonnet (Gratis - Analisis Kompleks)" },
     { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Gratis)" },
     { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash (Gratis)" },
     { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro (Berbayar/Quota)" },
