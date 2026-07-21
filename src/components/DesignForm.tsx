@@ -14,6 +14,8 @@ interface DesignFormProps {
   selectedProvider: string;
   setSelectedProvider: (provider: string) => void;
   currentUserEmail?: string;
+  customApiKey: string;
+  onChangeCustomApiKey: (key: string) => void;
 }
 
 export default function DesignForm({
@@ -26,7 +28,9 @@ export default function DesignForm({
   theme,
   selectedProvider,
   setSelectedProvider,
-  currentUserEmail
+  currentUserEmail,
+  customApiKey,
+  onChangeCustomApiKey
 }: DesignFormProps) {
   const cardBg = theme === "dark" ? "bg-slate-900/60 border-slate-800" : "bg-white border-slate-200/80 shadow-sm";
   const labelColor = theme === "dark" ? "text-slate-300" : "text-slate-600";
@@ -233,6 +237,31 @@ export default function DesignForm({
                 <span>Gemini terhubung: <strong>{currentUserEmail}</strong></span>
               </div>
             )}
+          </div>
+
+          {/* Custom Gemini API Key Input */}
+          <div className="mt-3 max-w-lg">
+            <label className="block text-[9px] font-bold text-slate-400 mb-1">
+              Kunci API Gemini Kustom (Opsional - Jika kuota default habis)
+            </label>
+            <div className="relative flex items-center">
+              <input
+                type="password"
+                value={customApiKey}
+                onChange={(e) => onChangeCustomApiKey(e.target.value)}
+                placeholder="Masukkan API Key Gemini Anda (AIzaSy...)"
+                className={`w-full px-2.5 py-1 text-xs rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 border ${
+                  theme === "dark"
+                    ? "bg-slate-900/80 border-slate-800 text-slate-100 placeholder-slate-600"
+                    : "bg-white border-slate-200 text-slate-800 placeholder-slate-400 shadow-sm"
+                }`}
+              />
+              {customApiKey && (
+                <span className="absolute right-2.5 text-[9px] font-bold text-teal-500">
+                  Kunci Aktif ✓
+                </span>
+              )}
+            </div>
           </div>
           <p className="text-[9px] text-slate-400 mt-1 font-sans">
             *Menggunakan data rujukan konseptual aplikasi untuk menghasilkan generate yang sangat presisi sesuai materi pembelajaran.

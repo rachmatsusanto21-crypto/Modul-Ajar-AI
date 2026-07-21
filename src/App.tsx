@@ -606,6 +606,8 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
               selectedProvider={settings.apiProvider}
               setSelectedProvider={(provider) => setSettings(prev => ({ ...prev, apiProvider: provider }))}
               currentUserEmail={currentUser?.email}
+              customApiKey={settings.customApiKey || ""}
+              onChangeCustomApiKey={(key) => setSettings(prev => ({ ...prev, customApiKey: key }))}
             />
           </div>
 
