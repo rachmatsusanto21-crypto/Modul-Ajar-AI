@@ -1,0 +1,6 @@
+{
+  "name": "AI Modul Ajar dan RPP Generator",
+  "description": "Asisten pembuatan modul ajar dan rencana pelaksanaan pembelajaran otomatis berbasis AI yang tersinkronisasi dengan Google Drive.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
