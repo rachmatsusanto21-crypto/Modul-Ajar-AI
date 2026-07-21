@@ -90,6 +90,7 @@ export default function App() {
   const [exportingThirdParty, setExportingThirdParty] = useState(false);
   const [driveLogs, setDriveLogs] = useState<string[]>([]);
   const [quotaNotice, setQuotaNotice] = useState<string | null>(null);
+  const [geminiActive, setGeminiActive] = useState<boolean | null>(null);
   
   // Login modal & Add User modal states
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -133,8 +134,23 @@ export default function App() {
       setUsers(JSON.parse(localUsersList));
     }
 
-    // Load initial sync
+    // Load initial sync & check Gemini status
     fetchCloudSync();
+    
+    const checkGeminiStatus = async () => {
+      try {
+        const res = await fetch("/api/gemini/status");
+        if (res.ok) {
+          const data = await res.json();
+          setGeminiActive(data.active);
+        } else {
+          setGeminiActive(false);
+        }
+      } catch (err) {
+        setGeminiActive(false);
+      }
+    };
+    checkGeminiStatus();
   }, []);
 
   // Save to local storage when state changes
@@ -766,6 +782,7 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
               currentUserEmail={currentUser?.email}
               customApiKey={settings.customApiKey || ""}
               onChangeCustomApiKey={(key) => setSettings(prev => ({ ...prev, customApiKey: key }))}
+              geminiActive={geminiActive}
             />
           </div>
 

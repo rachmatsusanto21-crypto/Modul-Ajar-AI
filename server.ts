@@ -105,6 +105,19 @@ function getAI() {
   return aiClient;
 }
 
+app.get("/api/gemini/status", (req, res) => {
+  const hasKey = !!process.env.GEMINI_API_KEY && 
+                 process.env.GEMINI_API_KEY !== "DUMMY_KEY" && 
+                 process.env.GEMINI_API_KEY !== "MY_GEMINI_API_KEY";
+  res.json({
+    active: hasKey,
+    hasServerKey: hasKey,
+    message: hasKey 
+      ? "Layanan Gemini Utama aktif via Server-Side API Key."
+      : "Layanan Gemini Utama sedang menggunakan mode simulasi cerdas lokal karena Server-Side API Key belum dikonfigurasi."
+  });
+});
+
 app.post("/api/generate", async (req, res) => {
   const { prompt, provider, customApiKey, userEmail } = req.body;
 

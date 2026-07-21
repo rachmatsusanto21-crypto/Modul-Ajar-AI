@@ -20,6 +20,7 @@ interface DesignFormProps {
   currentUserEmail?: string;
   customApiKey: string;
   onChangeCustomApiKey: (key: string) => void;
+  geminiActive?: boolean | null;
 }
 
 export default function DesignForm({
@@ -38,7 +39,8 @@ export default function DesignForm({
   setSelectedProvider,
   currentUserEmail,
   customApiKey,
-  onChangeCustomApiKey
+  onChangeCustomApiKey,
+  geminiActive = null
 }: DesignFormProps) {
   const cardBg = theme === "dark" ? "bg-slate-900/60 border-slate-800" : "bg-white border-slate-200/80 shadow-sm";
   const labelColor = theme === "dark" ? "text-slate-300" : "text-slate-600";
@@ -266,23 +268,51 @@ export default function DesignForm({
             {currentUserEmail && (
               <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-2.5 py-1.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-sans">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Gemini terhubung: <strong>{currentUserEmail}</strong></span>
+                <span>Penyimpanan Google Drive Terhubung: <strong>{currentUserEmail}</strong></span>
               </div>
             )}
           </div>
 
+          {/* Gemini API Status Indicator */}
+          <div className={`mt-2.5 flex items-center gap-2 text-[10px] p-2 rounded-lg ${
+            customApiKey || geminiActive
+              ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20"
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+          }`}>
+            <Sparkles size={12} className={customApiKey || geminiActive ? "" : "animate-pulse"} />
+            <span>
+              <strong>Status Gemini AI:</strong>{" "}
+              {customApiKey 
+                ? "Aktif (Menggunakan API Key Kustom Anda)" 
+                : geminiActive 
+                  ? "Aktif (Menggunakan Kunci API Server)" 
+                  : "Mode Simulasi Sinkronisasi Aktif (Kunci API Belum Disetel)"
+              }
+            </span>
+          </div>
+
           {/* Custom Gemini API Key Input */}
-          <div className="mt-3 max-w-lg">
-            <label className="block text-[9px] font-bold text-slate-400 mb-1">
-              Kunci API Gemini Kustom (Opsional - Jika kuota default habis)
-            </label>
+          <div className="mt-3.5 max-w-lg">
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-[9px] font-bold text-slate-400">
+                Kunci API Gemini Kustom (Dibutuhkan untuk Gemini AI Asli)
+              </label>
+              <a 
+                href="https://aistudio.google.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[9px] text-blue-500 dark:text-blue-400 hover:underline font-bold"
+              >
+                Buat API Key Gratis Baru →
+              </a>
+            </div>
             <div className="relative flex items-center">
               <input
                 type="password"
                 value={customApiKey}
                 onChange={(e) => onChangeCustomApiKey(e.target.value)}
-                placeholder="Masukkan API Key Gemini Anda (AIzaSy...)"
-                className={`w-full px-2.5 py-1 text-xs rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 border ${
+                placeholder="Masukkan API Key Gemini Anda di sini (dimulai dengan AIzaSy...)"
+                className={`w-full px-2.5 py-1.5 text-xs rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 border ${
                   theme === "dark"
                     ? "bg-slate-900/80 border-slate-800 text-slate-100 placeholder-slate-600"
                     : "bg-white border-slate-200 text-slate-800 placeholder-slate-400 shadow-sm"
@@ -294,10 +324,10 @@ export default function DesignForm({
                 </span>
               )}
             </div>
+            <p className="text-[9.5px] text-slate-500 dark:text-slate-400 mt-1.5 font-sans leading-relaxed">
+              <strong>💡 Panduan Akses:</strong> Akun email belajar.id ({currentUserEmail || "rachmatsusanto21"}) Anda terhubung untuk sinkronisasi berkas otomatis ke Google Drive & Google Docs Anda. Untuk menggunakan kecerdasan Gemini AI asli (non-simulasi), silakan masukkan <strong>Kunci API Gemini</strong> di atas, atau minta Admin Sekolah Anda untuk menyetel variabel sistem <code>GEMINI_API_KEY</code> di server.
+            </p>
           </div>
-          <p className="text-[9px] text-slate-400 mt-1 font-sans">
-            *Menggunakan data rujukan konseptual aplikasi untuk menghasilkan generate yang sangat presisi sesuai materi pembelajaran.
-          </p>
         </div>
 
         {/* Generate / Stop / Save Buttons */}
