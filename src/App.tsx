@@ -338,7 +338,16 @@ Output harus menyajikan:
 1. Ringkasan materi pokok esensial secara detail sesuai Kurikulum Merdeka.
 2. Skenario langkah-langkah pembelajaran (Pembuka, Inti, Penutup) yang memanfaatkan Pendekatan "${design.pendekatan}" dan Model "${design.modelPembelajaran}".
 
-   PENTING: Di dalam bagian Kegiatan Inti, Anda DILARANG KERAS menuliskan satu baris ringkasan umum seperti "Siswa berkolaborasi melakukan investigasi, mengumpulkan data, berdiskusi, dan merancang solusi/projek sesuai sintaks model...".
+   PENTING UNTUK KEGIATAN PEMBUKA / PENDAHULUAN:
+   Kegiatan pendahuluan WAJIB diuraikan secara sangat spesifik, detail, dan mencakup 5 elemen operasional berikut secara tertulis:
+   - Poin 1 (Salam & Doa): Bagaimana guru membuka pembelajaran dengan salam hangat, doa bersama dipimpin ketua kelas, dan presensi menyenangkan yang membangkitkan kebersamaan.
+   - Poin 2 (Kegiatan Pagi Ceria): Ice breaking interaktif spesifik (misalnya tebak kata, tepuk berpola, gerak cepat) yang meningkatkan fokus, kesiapan mental, dan kebahagiaan siswa.
+   - Poin 3 (Apersepsi Spesifik): Uraikan secara spesifik bentuk kegiatan/pertanyaan pemantik konkret bagaimana guru mengaitkan materi prasyarat/sebelumnya dengan materi "${design.materiPokok || "hari ini"}". Hindari kalimat abstrak seperti "mengaitkan materi". Tuliskan dialog atau pertanyaan aslinya!
+   - Poin 4 (Tujuan Pembelajaran): Sebutkan secara sangat spesifik dan operasional tujuan pembelajaran konkrit apa yang ingin dicapai siswa hari ini.
+   - Poin 5 (Kontekstualitas Nyata): Jelaskan secara gamblang manfaat nyata materi ini dalam kehidupan sehari-hari siswa (contoh untuk bilangan cacah: agar siswa mampu menyebutkan nama bilangan secara tepat saat menghitung harga total buku yang dibeli di toko buku, mencatat tabungan, dsb; atau disesuaikan dengan topik IPAS/bahasa lainnya secara riil).
+
+   PENTING UNTUK KEGIATAN INTI:
+   Di dalam bagian Kegiatan Inti, Anda DILARANG KERAS menuliskan satu baris ringkasan umum seperti "Siswa berkolaborasi melakukan investigasi, mengumpulkan data, berdiskusi, dan merancang solusi/projek sesuai sintaks model...".
    Sebaliknya, Anda WAJIB menjabarkan setiap langkah/sintaks operasional dari Model Pembelajaran yang dipilih ("${design.modelPembelajaran}") secara rinci, berurutan, dan terperinci dari awal sampai akhir (misal untuk PjBL: mulai dari Penentuan Pertanyaan Mendasar, Mendesain Perencanaan Projek, Menyusun Jadwal, Memonitor Keberajuan, Menguji Hasil, hingga Evaluasi Pengalaman; untuk PBL: Orientasi Masalah, Mengorganisasi Belajar, Membimbing Penyelidikan, Mengembangkan & Menyajikan Hasil Karya, hingga Analisis & Evaluasi). Jelaskan apa yang dilakukan guru dan apa yang dilakukan siswa pada tiap tahapan tersebut secara konkret dan mendalam!
 
 3. Uraian 10 Lampiran Lengkap (LKPD Mandiri/Kelompok, Rubrik Penilaian Sikap/Keterampilan/Pengetahuan, Kisi-kisi Asesmen Bloom, Kartu Soal, Contoh Soal Ujian Cetak, Umpan Balik Siswa, Rencana Portofolio, Panduan Presentasi, Lembar Penilaian Siswa, dan Ringkasan Materi Pendalam).

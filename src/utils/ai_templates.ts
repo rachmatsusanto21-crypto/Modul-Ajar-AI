@@ -489,6 +489,28 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
     indikatorKelengkapan = "Melengkapi semua lembar pengamatan komponen lingkungan hidup, merangkum dampak pestisida, serta menawarkan solusi biologi yang utuh.";
   }
 
+  // Dynamic Introductory/Awal activities with 5 highly detailed specific points
+  let kegiatanAwalText = "";
+  if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || subLower.includes("matematika")) {
+    kegiatanAwalText = `1. Pembukaan (Salam & Doa): Guru membuka pembelajaran dengan salam hangat, menanyakan kabar, mengajak seluruh siswa berdoa bersama dipimpin oleh ketua kelas, serta melakukan presensi kehadiran siswa secara interaktif untuk menciptakan atmosfer kelas yang positif dan siap belajar.
+2. Kegiatan Pagi Ceria: Ice breaking interaktif "Tepuk Konsentrasi & Bilangan Cepat", di mana guru menyebutkan angka puluhan/satuan secara cepat dan siswa harus menepuk tangan sesuai jumlah nilai tempatnya untuk membangkitkan fokus, kesiapan mental, dan kebahagiaan siswa sebelum masuk ke materi inti.
+3. Apersepsi Spesifik: Guru mengaitkan materi sebelumnya (yaitu "Bilangan cacah sampai 10.000") dengan materi baru "${design.materiPokok || "Bilangan cacah sampai 100.000"}". Caranya, guru menunjukkan gambar barang seharga Rp 9.500 dan bertanya secara konkret kepada siswa: "Anak-anak, jika kita membeli 5 buku ini di toko, harganya akan melebihi sepuluh ribu rupiah. Bagaimana cara kita menuliskan dan membaca nominal besar tersebut secara tepat?" Siswa mengamati perubahan digit dari ribuan menuju puluh ribuan.
+4. Tujuan Pembelajaran Spesifik: Melalui kegiatan eksplorasi kelompok dan media kartu angka, peserta didik dapat menentukan nilai tempat, membaca, menulis, membandingkan, serta mengurutkan bilangan cacah hingga 100.000 dengan tepat dan mandiri.
+5. Kontekstualitas Nyata: Pembelajaran ini bermanfaat langsung agar peserta didik mampu menyebutkan nama bilangan dengan tepat saat menghitung harga total buku yang dibeli di toko buku, membayar belanjaan, atau menghitung kembalian belanja secara mandiri tanpa keliru nilai tempatnya dalam kehidupan sehari-hari.`;
+  } else if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil") || subLower.includes("ipas") || subLower.includes("ipa")) {
+    kegiatanAwalText = `1. Pembukaan (Salam & Doa): Guru membuka pembelajaran dengan salam hangat, menanyakan kabar, mengajak seluruh siswa berdoa bersama dipimpin oleh ketua kelas, serta melakukan presensi kehadiran siswa secara interaktif untuk menciptakan atmosfer kelas yang positif dan siap belajar.
+2. Kegiatan Pagi Ceria: Ice breaking interaktif "Tebak Daun & Gerak Oksigen", di mana siswa melakukan gerakan menghirup udara segar bersama-sama dan menebak jenis tanaman di pekarangan sekolah untuk menyegarkan pikiran dan membangkitkan kesiapan belajar.
+3. Apersepsi Spesifik: Guru mengaitkan materi bagian-bagian tumbuhan (akar, batang, daun) dengan materi "Fotosintesis dan Klorofil". Caranya, guru menyandingkan tumbuhan yang segar dengan tumbuhan pot kecil yang layu karena disimpan di lemari gelap, lalu melontarkan pertanyaan pemantik konkrit: "Anak-anak, mengapa tumbuhan yang disimpan di lemari gelap tampak layu kekuningan sedangkan yang di luar tampak hijau segar? Apa yang sedang dilakukan oleh zat hijau daun di bawah paparan sinar matahari?" Siswa diajak mengidentifikasi pentingnya cahaya bagi daun tumbuhan.
+4. Tujuan Pembelajaran Spesifik: Melalui eksperimen sederhana uji amilum daun dan diskusi kelompok, peserta didik dapat mengidentifikasi bahan-bahan utama proses fotosintesis, menjelaskan skema reaksinya, serta menyimpulkan pentingnya fotosintesis bagi makhluk hidup lain dengan tepat.
+5. Kontekstualitas Nyata: Pembelajaran ini bermanfaat langsung agar peserta didik menyadari pentingnya merawat tumbuhan hijau di pekarangan rumah serta melestarikannya guna menjamin ketersediaan suplai udara bersih (oksigen) yang segar untuk pernapasan seluruh keluarga secara alami.`;
+  } else {
+    kegiatanAwalText = `1. Pembukaan (Salam & Doa): Guru membuka pembelajaran dengan salam hangat, menanyakan kabar, mengajak seluruh siswa berdoa bersama dipimpin oleh ketua kelas, serta melakukan presensi kehadiran siswa secara interaktif untuk menciptakan atmosfer kelas yang positif dan siap belajar.
+2. Kegiatan Pagi Ceria: Ice breaking interaktif "Sambung Kata Konseptual", di mana siswa secara bergiliran mengucapkan satu kata positif yang relevan dengan materi "${design.materiPokok || "pembelajaran hari ini"}" untuk menstimulus kesiapan kognitif, kebersamaan, dan rasa gembira.
+3. Apersepsi Spesifik: Guru mengaitkan materi prasyarat yang dipelajari pada pertemuan sebelumnya dengan materi baru "${design.materiPokok || "topik utama"}". Caranya, guru menuliskan satu studi kasus singkat di papan tulis terkait pengalaman harian siswa dan bertanya secara konkret: "Bagaimana cara kita memecahkan masalah tersebut dengan menyambungkan konsep lama kita ke topik ${design.materiPokok || "yang akan kita bahas hari ini"}?"
+4. Tujuan Pembelajaran Spesifik: Melalui rangkaian aktivitas pembelajaran aktif menggunakan pendekatan ${design.pendekatan} dan model ${design.modelPembelajaran}, siswa diharapkan secara spesifik mampu menganalisis, menguraikan, serta mendemonstrasikan pemahaman konsep "${design.materiPokok || "materi utama"}" secara runtut, logis, dan kritis.
+5. Kontekstualitas Nyata: Pembelajaran mengenai "${design.materiPokok || "topik ini"}" bermanfaat langsung agar peserta didik memiliki kecakapan praktis dalam mengenali, menyusun solusi, dan mengaplikasikan keahlian terkait ${design.materiPokok || "topik pembelajaran"} untuk memecahkan masalah nyata yang mereka temui dalam kehidupan sehari-hari di rumah maupun di masyarakat.`;
+  }
+
   // Final Output Module Construct
   return {
     id,
@@ -504,11 +526,7 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
       {
         tahapan: "Awal",
         sintaks: "Pendahuluan & Apersepsi",
-        kegiatan: `1. Guru membuka pembelajaran dengan salam hangat, doa bersama dipimpin ketua kelas, serta melakukan presensi kehadiran siswa.
-2. Kegiatan Pagi Ceria: Ice breaking interaktif (misalnya permainan tebak kata/gerak cepat) untuk membangkitkan fokus dan kebahagiaan siswa.
-3. Apersepsi: Guru mengaitkan materi sebelumnya dengan materi "${design.materiPokok}" melalui pertanyaan pemantik kontekstual.
-4. Menjelaskan tujuan pembelajaran yang ingin dicapai pada hari ini.
-5. Kontekstualitas: Mengaitkan manfaat nyata materi ini dalam kehidupan sehari-hari siswa agar tumbuh motivasi belajar intrinsik.`,
+        kegiatan: kegiatanAwalText,
         alokasiWaktu: waktuAwal,
         keterangan: "Fokus pada pengkondisian psikis siswa dan pembentukan koneksi emosional pembelajaran."
       },
