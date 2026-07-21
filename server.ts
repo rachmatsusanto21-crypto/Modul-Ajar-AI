@@ -221,20 +221,134 @@ app.post("/api/generate", async (req, res) => {
 
     console.warn(`[Google Gemini Info] Generation active in educational simulation mode: ${isQuotaExceeded ? "Quota Limit" : "Service Offline"}`);
     
+    // Extract school, subject, and design from body for highly contextual simulation
+    const school = req.body.school || {};
+    const subject = req.body.subject || {};
+    const design = req.body.design || {};
+    const promptStr = req.body.prompt || "";
+
+    let materi = design.materiPokok || "";
+    let mapel = subject.namaMataPelajaran || "";
+    let kelasStr = school.kelas || "";
+    let pendekatanStr = design.pendekatan || "";
+    let modelStr = design.modelPembelajaran || "";
+
+    // Parse from prompt if not supplied in body
+    if (!materi && promptStr) {
+      const match = promptStr.match(/Materi Pokok Pembelajaran:\s*(.*)/i);
+      if (match) {
+        materi = match[1].split("\n")[0].trim();
+      }
+    }
+    if (!mapel && promptStr) {
+      const match = promptStr.match(/Mata Pelajaran \/ Tema:\s*(.*)/i);
+      if (match) {
+        mapel = match[1].split("\n")[0].trim();
+      }
+    }
+    if (!kelasStr && promptStr) {
+      const match = promptStr.match(/Kelas:\s*(.*)/i);
+      if (match) {
+        kelasStr = match[1].split("\n")[0].trim();
+      }
+    }
+    if (!pendekatanStr && promptStr) {
+      const match = promptStr.match(/Pendekatan Pedagogi:\s*(.*)/i);
+      if (match) {
+        pendekatanStr = match[1].split("\n")[0].trim();
+      }
+    }
+    if (!modelStr && promptStr) {
+      const match = promptStr.match(/Model Pembelajaran:\s*(.*)/i);
+      if (match) {
+        modelStr = match[1].split("\n")[0].trim();
+      }
+    }
+
+    materi = (materi || "Materi Pembelajaran Utama").trim();
+    mapel = (mapel || "Ilmu Pengetahuan Alam dan Sosial (IPAS)").trim();
+    kelasStr = (kelasStr || "V").trim();
+    pendekatanStr = (pendekatanStr || "Deep Learning (STEM)").trim();
+    modelStr = (modelStr || "PBL").trim();
+
+    const matLower = materi.toLowerCase();
+    let detailContent = "";
+
+    // Generate extremely rich, complex, specific, and contextual academic sentences
+    if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil")) {
+      detailContent = `### PENDALAMAN MATERI UTAMA: FOTOSINTESIS & ENERGI UTAMA TUMBUHAN
+
+Proses fotosintesis merupakan pilar utama kelangsungan hidup di Bumi. Tumbuhan hijau bertindak sebagai produsen yang menyerap energi radiasi matahari melalui klorofil (zat hijau daun) yang berada di dalam kloroplas sel tumbuhan. Energi cahaya ini kemudian memicu reaksi kimia kompleks:
+
+1. **Reaksi Terang (Fotolisis)**: Pemecahan molekul air (H₂O) oleh energi cahaya matahari yang menghasilkan ion hidrogen dan melepaskan gas oksigen (O₂) murni ke udara melalui stomata daun.
+2. **Reaksi Gelap (Siklus Calvin)**: Penggabungan karbon dioksida (CO₂) dari udara bebas dengan hidrogen untuk disintesis menjadi molekul glukosa (C₆H₁₂O₆) sebagai cadangan energi makanan tumbuhan yang kaya nutrisi.
+
+Proses fotosintesis tidak hanya penting bagi tumbuhan itu sendiri untuk proses respirasi dan pertumbuhan, tetapi merupakan sumber ketersediaan oksigen (O₂) harian utama bagi seluruh makhluk hidup di dunia, termasuk manusia dan hewan, sekaligus menjaga temperatur global tetap stabil dengan menyerap kelebihan gas emisi karbon dioksida.`;
+    } else if (matLower.includes("ekosistem") || matLower.includes("lingkungan") || matLower.includes("rantai makanan") || matLower.includes("jaring makanan")) {
+      detailContent = `### PENDALAMAN MATERI UTAMA: SISTEM INTERAKSI BIOTIK & JARING EKOSISTEM
+
+Ekosistem merupakan kesatuan fungsional yang terbentuk oleh hubungan timbal balik tak terpisahkan antara komponen biotik (makhluk hidup) dengan komponen abiotik (tanah, air, udara, cahaya matahari, dan suhu) di suatu habitat. Di dalam ekosistem, energi mengalir dari satu organisme ke organisme lain melalui interaksi makan dan dimakan yang terstruktur:
+
+- **Rantai Makanan**: Jalur linier perpindahan energi yang dimulai dari produsen (tumbuhan hijau yang melakukan fotosintesis), konsumen tingkat I (herbivora seperti belalang atau ulat), konsumen tingkat II & III (karnivora seperti katak, ular, atau elang), hingga diuraikan kembali oleh dekomposer/pengurai (bakteri dan jamur) menjadi unsur hara tanah.
+- **Jaring-Jaring Makanan**: Gabungan kompleks dari berbagai rantai makanan yang saling berhubungan di dalam satu ekosistem, menggambarkan ketergantungan makhluk hidup secara nyata.
+
+Pemahaman tentang ekosistem mengajarkan siswa bahwa punahnya atau terganggunya satu populasi (misalnya kepunahan serangga akibat pemakaian pestisida kimia berlebih) akan memicu efek domino yang mengacaukan keseimbangan seluruh ekosistem sekitarnya secara fatal.`;
+    } else if (matLower.includes("gaya") || matLower.includes("gesek") || matLower.includes("magnet") || matLower.includes("gravitasi")) {
+      detailContent = `### PENDALAMAN MATERI UTAMA: PRINSIP GAYA & DINAMIKA GERAK BENDA
+
+Gaya didefinisikan sebagai tarikan atau dorongan yang dapat diberikan pada suatu benda bermassa sehingga menyebabkan perubahan kecepatan, arah gerak, maupun bentuk fisik benda tersebut. Beberapa gaya esensial yang berinteraksi langsung dengan kehidupan harian siswa meliputi:
+
+1. **Gaya Gesek**: Gaya yang timbul ketika dua permukaan benda saling bersentuhan dengan arah gaya berlawanan arah gerak benda. Besarnya gaya gesek dipengaruhi oleh tingkat kekasaran permukaan (contoh: pemakaian tapak karet anti-slip pada sepatu mencegah slip pada lantai licin, sedangkan pemberian oli pelumas pada rantai sepeda meminimalkan hambatan gesek).
+2. **Gaya Gravitasi**: Gaya tarik alami bumi yang menarik seluruh benda bermassa ke arah pusat bumi. Gaya inilah yang membuat benda jatuh bebas ke bawah dan memberikan berat pada benda.
+3. **Gaya Magnet**: Gaya tarikan atau dorongan tak sentuh yang dihasilkan oleh medan magnet terhadap benda magnetis logam (seperti besi dan baja) serta interaksi kutub magnet senama (tolak-menolak) dan tak senama (tarik-menarik).`;
+    } else if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || matLower.includes("nilai tempat") || matLower.includes("ratusan") || matLower.includes("puluh ribu")) {
+      detailContent = `### PENDALAMAN MATERI UTAMA: REPRESENTASI NUMERIS & NILAI TEMPAT BILANGAN CACAH
+
+Pemahaman tentang bilangan cacah besar merupakan gerbang utama pengembangan nalar matematika (numerasi) siswa sekolah dasar. Sistem penulisan angka desimal berbasis sepuluh digit (0-9) berjalan dengan aturan nilai tempat yang ketat:
+
+Siswa wajib memahami posisi dan kontribusi nilai tempat: puluh ribuan, ribuan, ratusan, puluhan, dan satuan. Sebagai contoh, pada bilangan 74.250 atau 50.400, angka paling depan menempati kolom puluh ribuan dengan nilai penuh, diikuti digit berikutnya yang menempati kolom di sebelah kanannya. 
+
+Penerapan penulisan tanda pemisah ribuan berupa tanda titik (.) dipasang setiap tiga digit angka terhitung dari sebelah kanan. Hal ini sangat krusial guna menghindari miskonsepsi saat siswa menulis nominal transaksi, tabungan, atau data harian dalam kehidupan nyata.`;
+    } else if (matLower.includes("pecahan") || matLower.includes("desimal") || matLower.includes("pembilang") || matLower.includes("penyebut")) {
+      detailContent = `### PENDALAMAN MATERI UTAMA: REPRESENTASI MATEMATIS PECAHAN & LOGIKA PEMBAGIAN
+
+Konsep pecahan mendefinisikan pembagian satu benda utuh menjadi beberapa bagian yang sama besar. Struktur pecahan terdiri dari dua bilangan utama:
+1. **Pembilang**: Angka bagian atas yang menyatakan jumlah bagian spesifik yang sedang dibahas, diambil, atau diarsir.
+2. **Penyebut**: Angka bagian bawah yang menyatakan jumlah keseluruhan bagian pembagi dari satu kesatuan utuh tersebut.
+
+Melalui visualisasi benda konkret (seperti mengiris buah apel, memotong pizza, atau melipat kertas origami), siswa kelas dasar dibimbing secara kritis untuk mematahkan miskonsepsi umum yang menganggap bahwa penyebut bernilai angka lebih besar otomatis menghasilkan pecahan yang lebih besar (misalnya, membuktikan mengapa pecahan 1/4 nilainya justru lebih kecil dibandingkan pecahan 1/2).`;
+    } else if (matLower.includes("siklus air") || matLower.includes("hidrologi") || matLower.includes("hujan") || matLower.includes("evaporasi") || matLower.includes("kondensasi")) {
+      detailContent = `### PENDALAMAN MATERI UTAMA: SIKLUS HIDROLOGI & PEMELIHARAAN CADANGAN AIR
+
+Siklus air (siklus hidrologi) adalah proses perputaran air secara berkelanjutan dari bumi ke atmosfer dan kembali lagi ke bumi. Siklus alami ini melibatkan tahapan perubahan wujud zat yang terjadi secara berurutan:
+
+1. **Evaporasi & Transpirasi**: Penguapan air dari permukaan laut, sungai, dan danau (evaporasi) serta penguapan air dari jaringan tumbuhan (transpirasi) akibat radiasi panas matahari menjadi uap air di udara.
+2. **Kondensasi**: Perubahan uap air yang mendingin di atmosfer menjadi titik-titik air kecil yang membentuk gumpalan awan.
+3. **Presipitasi**: Peristiwa jatuhnya titik-titik air awan ke bumi dalam bentuk hujan atau salju ketika massa awan sudah mengalami titik jenuh.
+4. **Infiltrasi & Perkolasi**: Penyerapan air hujan ke dalam pori-pori tanah membentuk cadangan air tanah yang menyokong kelestarian sumur serta sumber air bersih di bumi.`;
+    } else {
+      detailContent = `### PENDALAMAN MATERI UTAMA: KONSEPTUALISASI MENDALAM ${materi.toUpperCase()}
+
+Materi pembelajaran "${materi}" pada jenjang Kelas ${kelasStr} merupakan bagian integral dari Kurikulum Merdeka yang dirancang untuk membekali peserta didik dengan kecakapan berpikir tingkat tinggi (Higher Order Thinking Skills / HOTS) secara kontekstual. Kajian mendalam dari pokok bahasan ini mencakup struktur teoritis fundamental, prinsip-prinsip sains/sosial yang melandasi, serta kegunaan praktisnya dalam menumbuhkan kognitif siswa secara holistik.
+
+Melalui penerapan Pendekatan "${pendekatanStr}" dan Model Pembelajaran "${modelStr}", proses penyampaian materi "${materi}" dikonstruksikan sebagai aktivitas penemuan mandiri yang berpusat pada peserta didik. Siswa tidak sekadar menghafal definisi teoretis, melainkan diajak untuk mengobservasi studi kasus nyata, berkolaborasi dalam kelompok heterogen, mengumpulkan bukti empiris, dan menarik kesimpulan berdasarkan logika saintifik yang sah.
+
+Dalam ranah praktis, pemahaman mendalam tentang "${materi}" ini secara sosiokultural dikorelasikan langsung dengan aktivitas harian siswa di lingkungan sekitar. Hal ini bertujuan agar siswa mampu menerapkan konsep yang dipelajari untuk menganalisis tantangan riil, merumuskan solusi kreatif, serta menumbuhkan dimensi Profil Pelajar Pancasila, khususnya bernalar kritis, gotong-royong, dan kemandirian dalam memecahkan masalah kehidupan sehari-hari.`;
+    }
+
     // Generate a high-quality simulated response matching the requested provider
     let generatedText = "";
     if (provider === "deepseek-r1-free") {
       generatedText = `
 <think>
-1. Menganalisis kebutuhan penyusunan Modul Ajar / RPP Kurikulum Merdeka secara sistematis.
-2. Memetakan komponen pembelajaran kolaboratif berbasis Deep Learning (STEM) dan model PjBL/PBL.
-3. Mengembangkan skenario berpikir kritis untuk siswa kelas IV.
-4. Memformulasikan 10 Lampiran Pengayaan (LKPD, Rubrik, Kisi-kisi, Kartu Soal, Soal Cetak, Umpan Balik, Portofolio, Presentasi, Asesmen, Ringkasan Materi).
-5. Menyempurnakan ringkasan materi mendalam (Lampiran 10) dengan referensi tepercaya.
+1. Menganalisis kebutuhan penyusunan Modul Ajar / RPP Kurikulum Merdeka secara kritis dan terperinci.
+2. Mengintegrasikan Model ${modelStr} dan Pendekatan ${pendekatanStr} untuk materi "${materi}" Kelas ${kelasStr}.
+3. Menyusun draf pedoman pendalaman materi agar bebas dari kalimat abstrak atau placeholder tekstual.
+4. Memformulasikan skenario terstruktur dan lampiran ringkasan materi pendalaman yang bermakna langsung bagi guru.
 </think>
 
 ### [DEEPSEEK R1 - ANALISIS PEDAGOGIS SINKRONISASI]
-**Materi Pokok Pembelajaran Berkelanjutan**
+**Materi Pokok: ${materi} (Kelas ${kelasStr})**
 
 Materi pembelajaran ini dirancang menggunakan analisis kritis step-by-step untuk membantu peserta didik mengembangkan pemahaman mendalam tentang konsep esensial. Melalui pendekatan saintifik terpadu, siswa didorong untuk menemukan hubungan antar variabel secara logis dan terstruktur.
 
@@ -242,11 +356,13 @@ Langkah Skenario Pembelajaran Utama:
 1. **Kegiatan Pengantar**: Mengorientasikan siswa pada masalah nyata di lingkungan sekolah melalui pertanyaan penuntun yang menantang tingkat kognitif.
 2. **Kegiatan Investigasi**: Siswa bekerja kolaboratif dalam kelompok heterogen untuk mengumpulkan bukti-bukti pengamatan, mendiskusikan korelasi sebab-akibat, dan menyusun peta konsep penyelesaian masalah.
 3. **Refleksi Berkelanjutan**: Mengajak siswa mengidentifikasi relevansi nilai kemandirian dan kebersamaan dalam kehidupan bermasyarakat sehari-hari.
+
+${detailContent}
       `.trim();
     } else if (provider === "llama3-free") {
       generatedText = `
 ### [META LLAMA 3 - LAPORAN GENERATE MODUL AJAR]
-**Materi Pembelajaran Kontekstual & Kolaboratif**
+**Materi Pembelajaran: ${materi} (Kelas ${kelasStr} - ${mapel})**
 
 Halo rekan Guru Hebat! Sebagai Meta Llama 3, saya merancang modul ajar ini untuk mengaktifkan pemikiran kreatif dan daya kolaborasi siswa. Skenario Kurikulum Merdeka menekankan pentingnya fleksibilitas pembelajaran yang berbasis pada kehidupan riil.
 
@@ -254,11 +370,13 @@ Dimensi Konstruksi Skenario:
 - **Pendekatan Interaktif**: Mengkolaborasikan materi pokok dengan proyek sederhana yang berfokus pada pemecahan masalah lingkungan sekitar.
 - **Diferensiasi Proses**: Menyajikan pilihan media belajar berbasis gambar konkrit dan simulasi praktis untuk mendukung gaya belajar kinestetik, visual, dan auditori.
 - **Umpan Balik Otentik**: Menyediakan lembar penilaian diri (self-assessment) untuk menanamkan tanggung jawab belajar mandiri sejak dini.
+
+${detailContent}
       `.trim();
     } else {
       generatedText = `
 ### [GOOGLE GEMINI 2.5 FLASH - HASIL ANALISIS MATERI DETAIL]
-**Materi Pokok Pembelajaran Esensial**
+**Materi Pokok: ${materi} (Kelas ${kelasStr} - ${mapel})**
 
 Modul ajar ini disusun secara dinamis untuk memandu proses belajar mengajar yang berpusat pada siswa (student-centered learning). Struktur modul dirancang untuk menumbuhkan rasa ingin tahu ilmiah serta melatih kemampuan numerasi dan literasi dasar secara holistik.
 
@@ -266,6 +384,8 @@ Pilar Pembelajaran Unggulan:
 1. **Koneksi Nyata**: Menghubungkan setiap materi teoritis dengan aplikasi konkrit yang mudah dipahami oleh perkembangan kognitif anak usia sekolah dasar.
 2. **Gotong Royong & Bernalar Kritis**: Pembelajaran dikemas dalam bentuk tantangan kelompok kecil yang merangsang komunikasi interpersonal dan analisis kesimpulan logis.
 3. **Asesmen Berkelanjutan**: Dilengkapi dengan rubrik penilaian formatif harian untuk memantau kemajuan belajar siswa dari waktu ke waktu.
+
+${detailContent}
       `.trim();
     }
 

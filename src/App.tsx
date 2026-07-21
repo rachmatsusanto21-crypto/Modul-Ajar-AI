@@ -13,20 +13,20 @@ import {
 
 const INITIAL_SCHOOL: SchoolIdentity = {
   jenjang: "SD",
-  namaSekolah: "SD Negeri Cilincing 01",
-  fase: "Fase B (Kelas 3-4)",
-  kelas: "IV (Empat)",
-  paralel: "A",
-  namaGuru: "Rachmat Susanto, S.Pd.",
-  nipGuru: "19880412 201503 1 002",
-  namaKepalaSekolah: "Dr. H. Slamet Riyadi, M.Pd.",
-  nipKepalaSekolah: "19720510 199803 1 001",
+  namaSekolah: "SDN Pisangcandi 1",
+  fase: "Fase C (Kelas 5-6)",
+  kelas: "V (Lima)",
+  paralel: "",
+  namaGuru: "Rachmat Eko Riza Susanto, S.Pd.",
+  nipGuru: "19830112 201407 1 003",
+  namaKepalaSekolah: "Dina Yuli Agustin, S.Pd.SD, M.Pd.",
+  nipKepalaSekolah: "19220819 200903 2 004",
   kurikulum: "Kurikulum Merdeka",
   semester: "Ganjil",
-  tahunPelajaran: "2025/2026",
-  namaKota: "Jakarta Utara",
+  tahunPelajaran: "2026/2027",
+  namaKota: "Malang",
   tanggalPembuatan: new Date().toISOString().split("T")[0],
-  jumlahSiswa: 24
+  jumlahSiswa: 29
 };
 
 const INITIAL_SUBJECT: SubjectIdentity = {
@@ -71,11 +71,11 @@ export default function App() {
   const [users, setUsers] = useState<User[]>([
     {
       id: "rachmatsusanto21",
-      name: "Rachmat Susanto, S.Pd.",
+      name: "Rachmat Eko Riza Susanto, S.Pd.",
       email: "rachmatsusanto21@guru.sd.belajar.id",
       avatar: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150",
-      role: "Guru Kelas IV SD",
-      nip: "19880412 201503 1 002"
+      role: "Guru Kelas V SD",
+      nip: "19830112 201407 1 003"
     }
   ]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -123,11 +123,11 @@ export default function App() {
       // Force default login
       setCurrentUser({
         id: "rachmatsusanto21",
-        name: "Rachmat Susanto, S.Pd.",
+        name: "Rachmat Eko Riza Susanto, S.Pd.",
         email: "rachmatsusanto21@guru.sd.belajar.id",
         avatar: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150",
-        role: "Guru Kelas IV SD",
-        nip: "19880412 201503 1 002"
+        role: "Guru Kelas V SD",
+        nip: "19830112 201407 1 003"
       });
     }
     if (localUsersList) {
@@ -480,7 +480,10 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
           prompt: targetPrompt,
           provider: settings.apiProvider,
           customApiKey: settings.customApiKey,
-          userEmail: currentUser?.email
+          userEmail: currentUser?.email,
+          school,
+          subject,
+          design
         })
       });
 
@@ -561,12 +564,12 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${selectedModule.title}.${type === "doc" ? "docx" : "pdf"}`;
+    a.download = `${selectedModule.title}.${type === "doc" ? "doc" : "pdf"}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    addDriveLog(`Penyimpanan Lokal: Berhasil mengunduh berkas ${type === "doc" ? ".docx" : ".pdf"} secara lokal.`);
+    addDriveLog(`Penyimpanan Lokal: Berhasil mengunduh berkas ${type === "doc" ? ".doc" : ".pdf"} secara lokal.`);
   };
 
   // Export to Third-party API
