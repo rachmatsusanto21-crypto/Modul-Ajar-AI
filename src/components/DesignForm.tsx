@@ -10,6 +10,10 @@ interface DesignFormProps {
   onStopGenerate: () => void;
   onSaveDraft: () => void;
   generating: boolean;
+  onGenerateCP?: () => void;
+  onGenerateElemen?: () => void;
+  generatingCP?: boolean;
+  generatingElemen?: boolean;
   theme: "light" | "dark";
   selectedProvider: string;
   setSelectedProvider: (provider: string) => void;
@@ -25,6 +29,10 @@ export default function DesignForm({
   onStopGenerate,
   onSaveDraft,
   generating,
+  onGenerateCP,
+  onGenerateElemen,
+  generatingCP = false,
+  generatingElemen = false,
   theme,
   selectedProvider,
   setSelectedProvider,
@@ -92,7 +100,18 @@ export default function DesignForm({
         
         {/* Capaian Pembelajaran */}
         <div>
-          <label className={`block text-[11px] font-bold ${labelColor} mb-1.5`}>Capaian Pembelajaran (CP)</label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className={`text-[11px] font-bold ${labelColor}`}>Capaian Pembelajaran (CP)</label>
+            <button
+              type="button"
+              onClick={onGenerateCP}
+              disabled={generatingCP}
+              className={`flex items-center gap-1 text-[10px] font-bold py-0.5 px-2 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all cursor-pointer border border-blue-500/20 disabled:opacity-50`}
+            >
+              <Sparkles size={10} className={generatingCP ? "animate-spin" : ""} />
+              {generatingCP ? "Mencari CP..." : "Generate CP"}
+            </button>
+          </div>
           <textarea
             rows={2}
             value={design.capaianPembelajaran}
@@ -104,7 +123,18 @@ export default function DesignForm({
 
         {/* Elemen Capaian */}
         <div>
-          <label className={`block text-[11px] font-bold ${labelColor} mb-1.5`}>Elemen Capaian Pembelajaran</label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className={`text-[11px] font-bold ${labelColor}`}>Elemen Capaian Pembelajaran</label>
+            <button
+              type="button"
+              onClick={onGenerateElemen}
+              disabled={generatingElemen}
+              className={`flex items-center gap-1 text-[10px] font-bold py-0.5 px-2 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 hover:bg-teal-500/20 active:scale-95 transition-all cursor-pointer border border-teal-500/20 disabled:opacity-50`}
+            >
+              <Sparkles size={10} className={generatingElemen ? "animate-spin" : ""} />
+              {generatingElemen ? "Mencari Elemen..." : "Generate Elemen"}
+            </button>
+          </div>
           <textarea
             rows={2}
             value={design.elemenCapaian}

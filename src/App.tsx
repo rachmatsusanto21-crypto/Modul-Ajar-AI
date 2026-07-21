@@ -84,6 +84,8 @@ export default function App() {
   // App UI states
   const [syncing, setSyncing] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [generatingCP, setGeneratingCP] = useState(false);
+  const [generatingElemen, setGeneratingElemen] = useState(false);
   const [savingToDocs, setSavingToDocs] = useState(false);
   const [exportingThirdParty, setExportingThirdParty] = useState(false);
   const [driveLogs, setDriveLogs] = useState<string[]>([]);
@@ -288,6 +290,88 @@ export default function App() {
     alert("Draf kolom isian RPP berhasil disimpan secara lokal!");
   };
 
+  const handleGenerateCP = async () => {
+    setGeneratingCP(true);
+    addDriveLog("Mencari Capaian Pembelajaran resmi dari internet...");
+    const promptText = `Berdasarkan regulasi kurikulum resmi Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi Republik Indonesia, rumuskan satu paragraf Capaian Pembelajaran (CP) Kurikulum Merdeka yang paling tepat untuk mata pelajaran: "${subject.namaMataPelajaran}", kelas: "${school.kelas}", fase: "${school.fase}", materi pokok: "${design.materiPokok || "Umum"}". Berikan output teks murni berupa rumusan CP tersebut secara padat, profesional, akademis, dan langsung pada substansinya tanpa menyertakan kode markdown atau kata pengantar apa pun.`;
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: promptText,
+          provider: settings.apiProvider,
+          customApiKey: settings.customApiKey,
+          userEmail: currentUser?.email
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.text) {
+        let cleanText = data.text;
+        if (cleanText.includes("</think>")) {
+          cleanText = cleanText.split("</think>")[1].trim();
+        }
+        setDesign(prev => ({ ...prev, capaianPembelajaran: cleanText }));
+        addDriveLog("Berhasil men-generate Capaian Pembelajaran terbaru!");
+      } else {
+        throw new Error("Gagal memperoleh teks CP.");
+      }
+    } catch (e) {
+      console.error(e);
+      let fallbackCP = "Peserta didik mampu menganalisis hubungan antar komponen, mengidentifikasi pola hubungan konseptual dasar, serta menyusun gagasan penyelesaian masalah nyata terkait topik.";
+      if (subject.namaMataPelajaran.toLowerCase().includes("matematika") || design.materiPokok.toLowerCase().includes("bilangan")) {
+        fallbackCP = "Peserta didik dapat menunjukkan pemahaman dan intuisi bilangan (number sense) pada bilangan cacah sampai 100.000. Mereka dapat membaca, menulis, menentukan nilai tempat, membandingkan, mengurutkan, serta melakukan operasi penjumlahan dan pengurangan.";
+      } else if (subject.namaMataPelajaran.toLowerCase().includes("ipas") || design.materiPokok.toLowerCase().includes("fotosintesis")) {
+        fallbackCP = "Peserta didik menganalisis hubungan antara bentuk serta fungsi bagian tubuh pada manusia, hewan, dan tumbuhan. Mereka mendeskripsikan proses siklus hidup makhluk hidup dan mengaitkannya dengan fotosintesis sebagai pembuat makanan utama.";
+      }
+      setDesign(prev => ({ ...prev, capaianPembelajaran: fallbackCP }));
+      addDriveLog("Koneksi API dibatasi, menggunakan acuan kurikulum lokal.");
+    } finally {
+      setGeneratingCP(false);
+    }
+  };
+
+  const handleGenerateElemen = async () => {
+    setGeneratingElemen(true);
+    addDriveLog("Mencari Elemen Capaian resmi dari internet...");
+    const promptText = `Berdasarkan regulasi kurikulum resmi Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi Republik Indonesia, rumuskan Elemen Capaian Pembelajaran yang paling tepat untuk mata pelajaran: "${subject.namaMataPelajaran}", kelas: "${school.kelas}", fase: "${school.fase}", materi pokok: "${design.materiPokok || "Umum"}". Berikan output teks murni berupa judul elemen diikuti deskripsi kinerjanya secara padat, profesional, tanpa kode markdown atau kata pengantar apa pun.`;
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: promptText,
+          provider: settings.apiProvider,
+          customApiKey: settings.customApiKey,
+          userEmail: currentUser?.email
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.text) {
+        let cleanText = data.text;
+        if (cleanText.includes("</think>")) {
+          cleanText = cleanText.split("</think>")[1].trim();
+        }
+        setDesign(prev => ({ ...prev, elemenCapaian: cleanText }));
+        addDriveLog("Berhasil men-generate Elemen Capaian terbaru!");
+      } else {
+        throw new Error("Gagal memperoleh teks elemen.");
+      }
+    } catch (e) {
+      console.error(e);
+      let fallbackElemen = "Pemahaman Konsep & Keterampilan Proses Sains.";
+      if (subject.namaMataPelajaran.toLowerCase().includes("matematika") || design.materiPokok.toLowerCase().includes("bilangan")) {
+        fallbackElemen = "Bilangan (Peserta didik mampu melakukan estimasi dan operasi bilangan cacah besar).";
+      } else if (subject.namaMataPelajaran.toLowerCase().includes("ipas") || design.materiPokok.toLowerCase().includes("fotosintesis")) {
+        fallbackElemen = "Pemahaman Sains IPAS (Menganalisis fotosintesis daun, metabolisme tumbuhan, dan aliran energi).";
+      }
+      setDesign(prev => ({ ...prev, elemenCapaian: fallbackElemen }));
+      addDriveLog("Koneksi API dibatasi, menggunakan acuan kurikulum lokal.");
+    } finally {
+      setGeneratingElemen(false);
+    }
+  };
+
   // Generate Lesson Plan via AI with auto fallback capabilities
   const handleGenerate = async () => {
     setGenerating(true);
@@ -349,6 +433,23 @@ Output harus menyajikan:
    PENTING UNTUK KEGIATAN INTI:
    Di dalam bagian Kegiatan Inti, Anda DILARANG KERAS menuliskan satu baris ringkasan umum seperti "Siswa berkolaborasi melakukan investigasi, mengumpulkan data, berdiskusi, dan merancang solusi/projek sesuai sintaks model...".
    Sebaliknya, Anda WAJIB menjabarkan setiap langkah/sintaks operasional dari Model Pembelajaran yang dipilih ("${design.modelPembelajaran}") secara rinci, berurutan, dan terperinci dari awal sampai akhir (misal untuk PjBL: mulai dari Penentuan Pertanyaan Mendasar, Mendesain Perencanaan Projek, Menyusun Jadwal, Memonitor Keberajuan, Menguji Hasil, hingga Evaluasi Pengalaman; untuk PBL: Orientasi Masalah, Mengorganisasi Belajar, Membimbing Penyelidikan, Mengembangkan & Menyajikan Hasil Karya, hingga Analisis & Evaluasi). Jelaskan apa yang dilakukan guru dan apa yang dilakukan siswa pada tiap tahapan tersebut secara konkret dan mendalam!
+
+   PENTING UNTUK KEGIATAN PENUTUP / AKHIR:
+   Kegiatan akhir WAJIB mencakup komponen operasional berikut secara terperinci:
+   - Penguatan: Tuliskan jenis dan isi penguatan materi harian secara konkret, sampaikan kesalahan konsep (miskonsepsi) yang sering dilakukan oleh siswa pada materi "${design.materiPokok || "ini"}" dan lanjutkan dengan menjelaskan konsep yang benar secara sistematis.
+   - Penyimpulan Bersama: Jabarkan poin-poin kesimpulan harian secara detail yang diambil langsung dari materi pokok, lengkap dengan konsep yang benar beserta contoh-contoh aslinya.
+   - Refleksi & Umpan Balik / PR: Tuliskan secara spesifik bentuk, jenis, dan isi dari penugasan rumah (PR) terstruktur atau aktivitas mandiri agar memiliki korelasi langsung dengan materi pokok yang dipelajari.
+
+   PENTING UNTUK INSTRUMEN EVALUASI & 10 SOAL:
+   - Evaluasi harian harus mencakup tepat 10 butir soal asesmen sumatif yang terdiri dari:
+     - 5 soal Pilihan Ganda dengan 4 opsi (A, B, C, D)
+     - 3 soal Isian Pendek (Isian Singkat)
+     - 2 soal Uraian / Esai
+   - Pastikan rincian soal, kunci jawaban, kisi-kisi, dan kartu soal untuk ke-10 butir soal ini dijabarkan secara utuh, konkret, lengkap, dan berkorelasi penuh dengan materi pokok "${design.materiPokok || "ini"}". Jangan diringkas atau dikurangi jumlahnya!
+
+   PENTING UNTUK SUMBER BELAJAR & REFERENSI:
+   - Wajib mencantumkan alamat website yang valid dan dapat diakses secara nyata (misalnya tautan resmi jurnal nasional, portal Kemendikbudristek, dsb), lengkap dengan kutipan formal dan alamat web artikel atau jurnal yang dirujuk.
+   - Jika Anda tidak mendapati narasumber kompeten harian di kolom Sumber Belajar, maka narasumber kompeten TIDAK PERLU dicantumkan/dituliskan di hasil luaran.
 
 3. Uraian 10 Lampiran Lengkap (LKPD Mandiri/Kelompok, Rubrik Penilaian Sikap/Keterampilan/Pengetahuan, Kisi-kisi Asesmen Bloom, Kartu Soal, Contoh Soal Ujian Cetak, Umpan Balik Siswa, Rencana Portofolio, Panduan Presentasi, Lembar Penilaian Siswa, dan Ringkasan Materi Pendalam).
 
@@ -655,6 +756,10 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
               onStopGenerate={handleStopGenerate}
               onSaveDraft={handleSaveDraft}
               generating={generating}
+              onGenerateCP={handleGenerateCP}
+              onGenerateElemen={handleGenerateElemen}
+              generatingCP={generatingCP}
+              generatingElemen={generatingElemen}
               theme={settings.theme}
               selectedProvider={settings.apiProvider}
               setSelectedProvider={(provider) => setSettings(prev => ({ ...prev, apiProvider: provider }))}

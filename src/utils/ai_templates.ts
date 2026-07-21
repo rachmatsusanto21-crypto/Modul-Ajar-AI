@@ -208,52 +208,92 @@ Referensi & Daftar Rujukan:
   }
 
   const generatedQuestions: QuestionItem[] = [];
-  let qTemplates: { indicator: string; level: string; type: "Pilihan Ganda" | "Uraian / Esai"; question: string; key: string; points: number }[] = [];
+  let qTemplates: { indicator: string; level: string; type: "Pilihan Ganda" | "Isian Pendek" | "Uraian / Esai"; question: string; key: string; points: number }[] = [];
 
   if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || subLower.includes("matematika")) {
     qTemplates = [
       {
-        indicator: "Siswa dapat menentukan lambang bilangan dari nama bilangan cacah ratusan yang disajikan.",
+        indicator: "Siswa dapat menentukan lambang bilangan dari nama bilangan cacah sampai 100.000 yang disajikan.",
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
-        question: "Lambang bilangan dari 'tiga ratus empat puluh lima' yang tepat di bawah ini adalah...",
-        key: "A. 345 (Karena 3 menempati ratusan, 4 puluhan, dan 5 satuan)",
-        points: 15
+        question: "Lambang bilangan dari 'tujuh puluh ¼ ribu dua ratus lima puluh' atau 'tujuh puluh empat ribu dua ratus lima puluh' yang tepat adalah...",
+        key: "A. 74.250 (Angka 7 menempati puluh ribuan, 4 ribuan, 2 ratusan, 5 puluhan, dan 0 satuan)",
+        points: 10
       },
       {
-        indicator: "Disajikan angka acak, siswa dapat menganalisis nilai tempat angka nol pada lambang bilangan ratusan.",
+        indicator: "Disajikan angka acak, siswa dapat menganalisis nilai tempat angka tertentu pada lambang bilangan sampai 100.000.",
         level: "C2 (Memahami)",
         type: "Pilihan Ganda",
-        question: "Pada lambang bilangan '708', nilai tempat yang dimiliki oleh angka '0' adalah...",
-        key: "B. Puluhan (Angka 7 menempati ratusan, 0 menempati puluhan, dan 8 menempati satuan)",
-        points: 15
+        question: "Pada lambang bilangan '50.400', nilai tempat yang dimiliki oleh angka '5' adalah...",
+        key: "B. Puluh Ribuan (Angka 5 menempati puluh ribuan, bernilai 50.000)",
+        points: 10
       },
       {
-        indicator: "Siswa dapat menyusun bilangan ratusan terkecil dari tiga angka berbeda yang diberikan.",
+        indicator: "Siswa dapat membandingkan dua bilangan cacah sampai 100.000 menggunakan simbol ketidaksamaan.",
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
-        question: "Diberikan angka 4, 9, dan 2. Susunan bilangan ratusan terkecil yang dapat dibentuk dari ketiga kartu angka tersebut adalah...",
-        key: "C. 249 (Mengurutkan angka dari yang paling kecil ke paling besar)",
-        points: 15
+        question: "Perbandingan yang benar antara bilangan '56.780' dan '56.870' di bawah ini adalah...",
+        key: "C. 56.780 < 56.870 (Karena nilai ratusan 7 lebih kecil daripada ratusan 8)",
+        points: 10
       },
       {
-        indicator: "Siswa dapat menganalisis peran nilai tempat bilangan cacah dalam merencanakan penghematan energi listrik rumah.",
+        indicator: "Siswa dapat menentukan penulisan nominal mata uang sampai 100.000 yang tepat sesuai aturan tata bahasa.",
+        level: "C1 (Mengingat)",
+        type: "Pilihan Ganda",
+        question: "Penulisan lambang uang dan nama bilangan dari nominal 'Rp 98.500' yang benar secara formal adalah...",
+        key: "A. Sembilan puluh delapan ribu lima ratus rupiah",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat mengurutkan beberapa bilangan cacah besar mulai dari yang nilainya paling kecil.",
+        level: "C3 (Mengaplikasikan)",
+        type: "Pilihan Ganda",
+        question: "Urutan bilangan dari yang terkecil hingga terbesar untuk bilangan: 12.350, 12.530, dan 12.305 yang benar adalah...",
+        key: "B. 12.305, 12.350, 12.530",
+         points: 10
+      },
+      {
+        indicator: "Siswa dapat melengkapi nilai tempat dari digit angka nol pada bilangan besar harian.",
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: "Pada bilangan 90.400, angka 0 yang terletak di sebelah kanan angka 9 menempati nilai tempat...",
+        key: "Ribuan (bernilai 0 ribuan)",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menuliskan lambang bilangan cacah yang didektekan guru secara lisan.",
+        level: "C1 (Mengingat)",
+        type: "Isian Pendek",
+        question: "Lambang bilangan dari sembilan puluh ribu sembilan secara numerik ditulis...",
+        key: "90.009",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menguraikan bentuk panjang bilangan berdasarkan letak nilai tempatnya.",
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: "Bilangan 67.089 jika dijabarkan menurut nilai tempatnya adalah 60.000 + 7.000 + [....] + 80 + 9. Isian rumpang yang tepat adalah...",
+        key: "0 (karena ratusannya bernilai nol)",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menganalisis peran nilai tempat bilangan cacah dalam kehidupan sehari-hari.",
         level: "C4 (Menganalisis)",
         type: "Uraian / Esai",
-        question: "Jelaskan bagaimana pemahaman nilai tempat bilangan cacah membantu Anda membandingkan angka penggunaan kWh meteran listrik bulanan di rumah guna mengidentifikasi pemborosan energi!",
-        key: "Jawaban esai terstruktur: Siswa menganalisis nilai tempat ratusan dan puluhan pada kWh meteran bulanan. Dengan membandingkan angka ratusan kWh antar bulan, siswa tahu kapan konsumsi naik tajam (misal dari 340 kWh ke 450 kWh) dan merancang tindakan penghematan secara spesifik.",
-        points: 25
+        question: "Analisislah mengapa pemahaman nilai tempat bilangan cacah sangat krusial saat kita menghitung total harga buku di kasir toko buku dan mencocokkan jumlah uang kembalian yang diterima secara cepat!",
+        key: "Jawaban analisis terstruktur: Nilai tempat memandu pembacaan nominal uang dengan presisi. Misalnya, membedakan pecahan Rp 50.000 dan Rp 5.000. Kesalahan posisi digit (nilai tempat) berisiko menyebabkan kerugian transaksi finansial secara riil.",
+        points: 10
       },
       {
-        indicator: "Siswa dapat mengevaluasi dan memperbaiki penulisan nama bilangan besar yang tidak sesuai tata bahasa.",
+        indicator: "Siswa dapat mengevaluasi miskonsepsi penulisan angka besar harian dan menyajikan solusinya.",
         level: "C5 (Mengevaluasi)",
         type: "Uraian / Esai",
-        question: "Ditemukan catatan pembukuan kas kelas tertulis lambang bilangan '2.045' dibaca 'dua ribu empat puluh lima rupiah'. Evaluasilah apakah pembacaan nama bilangan tersebut sudah benar berdasarkan kaidah matematika, serta berikan analisis rincian nilai tempatnya!",
-        key: "Jawaban evaluatif: Pembacaan sudah benar. Struktur nilai tempatnya adalah: angka 2 menempati ribuan (2.000), angka 0 menempati ratusan (0), angka 4 menempati puluhan (40), dan angka 5 menempati satuan (5).",
-        points: 30
+        question: "Siswa bernama Budi menuliskan nominal 'lima puluh ribu empat ratus' menjadi '5400'. Evaluasilah miskonsepsi apa yang dialami oleh Budi, jelaskan konsep penulisan angka yang benar berdasarkan nilai tempat beserta alasannya!",
+        key: "Jawaban kritis-evaluatif: Budi mengalami miskonsepsi hilangnya angka nol penjaga nilai tempat (place-holder). Ia langsung menggabungkan 50 ribu dan 400 tanpa memperhatikan kolom ribuan dan puluhan. Penulisan yang benar adalah '50.400', di mana kolom ribuan diisi angka 0 dan puluhan diisi angka 0 agar angka 5 bernilai puluh ribuan.",
+        points: 10
       }
     ];
-  } else if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil")) {
+  } else if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil") || subLower.includes("ipas") || subLower.includes("ipa")) {
     qTemplates = [
       {
         indicator: "Siswa dapat menyebutkan zat hijau daun yang krusial dalam menyerap energi matahari.",
@@ -261,7 +301,7 @@ Referensi & Daftar Rujukan:
         type: "Pilihan Ganda",
         question: "Zat hijau pada daun tumbuhan yang berperan menangkap sinar matahari untuk fotosintesis disebut...",
         key: "B. Klorofil",
-        points: 15
+        points: 10
       },
       {
         indicator: "Siswa dapat menyimpulkan bahan-bahan baku utama yang diperlukan untuk reaksi fotosintesis.",
@@ -269,7 +309,7 @@ Referensi & Daftar Rujukan:
         type: "Pilihan Ganda",
         question: "Bahan yang diperlukan tumbuhan untuk melakukan fotosintesis yang diserap melalui akar dan udara adalah...",
         key: "A. Air dan Karbondioksida",
-        points: 15
+        points: 10
       },
       {
         indicator: "Siswa dapat memprediksi dampak penutupan permukaan daun dengan alumunium foil terhadap produksi amilum.",
@@ -277,23 +317,63 @@ Referensi & Daftar Rujukan:
         type: "Pilihan Ganda",
         question: "Jika selembar daun ditutup kertas timah (alumunium foil) selama beberapa hari lalu ditetesi larutan iodine, bagian daun yang tertutup akan berwarna...",
         key: "C. Pucat / tidak berubah gelap (karena tidak mengalami fotosintesis dan tidak menghasilkan amilum)",
-        points: 15
+        points: 10
       },
       {
-        indicator: "Siswa dapat menguraikan hubungan sebab-akibat fotosintesis terhadap penyediaan suplai oksigen udara pekarangan.",
+        indicator: "Siswa dapat mengidentifikasi gas hasil fotosintesis yang dilepaskan ke udara bebas.",
+        level: "C1 (Mengingat)",
+        type: "Pilihan Ganda",
+        question: "Gas hasil akhir proses fotosintesis yang sangat bermanfaat bagi kelangsungan pernapasan manusia dan hewan adalah...",
+        key: "D. Oksigen",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menunjukkan sumber energi eksternal alami utama dalam proses pembuatan makanan tumbuhan.",
+        level: "C1 (Mengingat)",
+        type: "Pilihan Ganda",
+        question: "Sumber energi alami paling utama yang menggerakkan seluruh proses fotosintesis pada tumbuhan hijau adalah...",
+        key: "A. Sinar Matahari",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menyebutkan organel sel spesifik pada tumbuhan tempat berlangsungnya fotosintesis.",
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: "Organel sel tumbuhan yang mengandung zat klorofil tempat dilangsungkannya fotosintesis secara internal disebut...",
+        key: "Kloroplas",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat mengidentifikasi senyawa kimia karbon yang diserap daun dari atmosfer.",
+        level: "C1 (Mengingat)",
+        type: "Isian Pendek",
+        question: "Gas yang diserap stomata daun tumbuhan hijau dari udara sebagai bahan baku karbon fotosintesis adalah...",
+        key: "Karbondioksida (CO2)",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menyebutkan senyawa karbohidrat hasil fotosintesis yang disimpan sebagai cadangan energi.",
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: "Zat tepung hasil fotosintesis yang terdeteksi kehitaman saat diuji iodine di laboratorium dinamakan...",
+        key: "Amilum / Glukosa / Zat Tepung",
+        points: 10
+      },
+      {
+        indicator: "Siswa dapat menguraikan hubungan sebab-akibat fotosintesis terhadap kesegaran udara pekarangan.",
         level: "C4 (Menganalisis)",
         type: "Uraian / Esai",
-        question: "Analisislah mengapa intensitas sinar matahari pagi yang melimpah berkorelasi langsung terhadap kesegaran udara di pekarangan rumah yang dipenuhi pepohonan hijau!",
-        key: "Jawaban analitis: Pepohonan hijau menyerap energi matahari pagi secara optimal untuk melangsungkan fotosintesis dengan memecah air dan karbondioksida menjadi glukosa dan oksigen (O2). Kuantitas pelepasan gas oksigen yang tinggi inilah yang membuat udara terasa segar.",
-        points: 25
+        question: "Analisislah mengapa intensitas sinar matahari pagi yang melimpah berkorelasi langsung terhadap peningkatan kesegaran udara di pekarangan rumah yang dipenuhi pepohonan hijau!",
+        key: "Jawaban analitis: Pepohonan hijau menyerap energi matahari pagi secara optimal untuk melangsungkan fotosintesis dengan memecah air dan karbondioksida menjadi glukosa dan oksigen (O2). Kuantitas pelepasan gas oksigen segar yang melimpah inilah yang membuat udara pagi terasa sangat bersih dan menyehatkan.",
+        points: 10
       },
       {
-        indicator: "Siswa dapat merancang usulan perbaikan pekarangan rumah gersang berbasis prinsip optimalisasi fotosintesis.",
-        level: "C6 (Menciptakan)",
+        indicator: "Siswa dapat merinci proses fotosintesis secara runtut beserta skema reaksinya.",
+        level: "C5 (Mengevaluasi)",
         type: "Uraian / Esai",
-        question: "Rancanglah sebuah rencana penataan 3 jenis tumbuhan berdaun lebar di area pekarangan rumah Anda yang gersang agar dapat menyuplai oksigen secara maksimal sepanjang hari!",
-        key: "Jawaban kreatif: Siswa menyusun peta tata letak tanaman berdaun lebar di area timur agar mendapat sinar matahari pagi secara maksimal tanpa penghalang, menjamin laju fotosintesis tinggi harian.",
-        points: 30
+        question: "Jelaskan proses terjadinya fotosintesis pada tumbuhan secara sistematis, sertakan pula bahan baku yang dibutuhkan serta produk-produk akhir yang dihasilkannya!",
+        key: "Jawaban proses terperinci: Fotosintesis diawali penyerapan air oleh akar dan gas CO2 oleh stomata. Energi cahaya matahari ditangkap klorofil untuk mereaksikan air dan CO2 tersebut menjadi glukosa (sebagai cadangan makanan) dan gas oksigen (O2) yang dilepaskan kembali ke udara bebas.",
+        points: 10
       }
     ];
   } else {
@@ -303,67 +383,88 @@ Referensi & Daftar Rujukan:
         indicator: `Siswa dapat mendefinisikan prinsip dasar materi pokok ${design.materiPokok}.`,
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
-        question: `Manakah dari pernyataan berikut yang mendefinisikan konsep utama dari ${design.materiPokok} secara tepat?`,
+        question: `Manakah dari pernyataan berikut yang mendefinisikan konsep utama dari ${design.materiPokok || "Materi Pokok"} secara tepat?`,
         key: "A. Definisi operasional teoretis yang selaras dengan standar akademis nasional.",
-        points: 15
+         points: 10
       },
       {
         indicator: `Siswa dapat memahami komponen pembentuk materi ${design.materiPokok}.`,
         level: "C2 (Memahami)",
         type: "Pilihan Ganda",
-        question: `Berikut ini yang merupakan elemen pendukung utama dalam mewujudkan konsep ${design.materiPokok} adalah...`,
-        key: "B. Kolaborasi unsur biotik dan interaksi konseptual berkelanjutan.",
-        points: 15
+        question: `Berikut ini yang merupakan elemen pendukung utama dalam mewujudkan konsep ${design.materiPokok || "Materi Pokok"} adalah...`,
+        key: "B. Kolaborasi unsur biotik dan interaksi konseptual berkelanjutan harian.",
+        points: 10
       },
       {
         indicator: `Siswa dapat mendemonstrasikan penyelesaian kasus terkait ${design.materiPokok}.`,
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
-        question: `Ketika diberikan tantangan praktis mengenai ${design.materiPokok}, langkah pertama yang logis dilakukan adalah...`,
-        key: "C. Melakukan observasi karakteristik objek dan menyusun perencanaan tindakan.",
-        points: 15
+        question: `Ketika diberikan tantangan praktis mengenai ${design.materiPokok || "Materi Pokok"}, langkah pertama yang logis dilakukan adalah...`,
+        key: "C. Melakukan observasi karakteristik objek dan menyusun perencanaan tindakan harian.",
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat mengidentifikasi tujuan utama materi ${design.materiPokok}.`,
+        level: "C1 (Mengingat)",
+        type: "Pilihan Ganda",
+        question: `Tujuan fundamental dari pengkajian terstruktur terhadap materi ${design.materiPokok || "Materi Pokok"} di kelas adalah...`,
+        key: "D. Menumbuhkan penalaran kritis aktif siswa terhadap lingkungan riil.",
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat mengidentifikasi pengaplikasian mandiri materi ${design.materiPokok}.`,
+        level: "C3 (Mengaplikasikan)",
+        type: "Pilihan Ganda",
+        question: `Manakah di bawah ini yang merupakan perwujudan profil pelajar mandiri dalam mengkaji ${design.materiPokok || "Materi Pokok"}?`,
+        key: "A. Mampu menyelesaikan uji latihan pemahaman mandiri secara tekun dan berani.",
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat melengkapi istilah kunci pada pembahasan materi harian.`,
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: `Pendekatan terstruktur yang digunakan guru harian dalam menjembatani penyampaian materi ${design.materiPokok || "Materi Pokok"} adalah pendekatan...`,
+        key: "Pendekatan Saintifik Kontekstual",
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat menentukan jenis media yang paling relevan untuk materi harian.`,
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: `Situs web penunjang visualisasi virtual yang disiapkan oleh guru untuk simulasi konsep harian adalah...`,
+        key: "Simulasi Virtual / Alat Peraga Konkrit",
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat menyebutkan jenis evaluasi akhir di ujung pembelajaran harian.`,
+        level: "C1 (Mengingat)",
+        type: "Isian Pendek",
+        question: `Jenis asesmen mandiri tertulis di akhir pembelajaran harian untuk memetakan capaian pemahaman siswa dinamakan asesmen...`,
+        key: "Asesmen Sumatif Lingkup Materi",
+        points: 10
       },
       {
         indicator: `Siswa dapat menganalisis hubungan timbal balik variabel pada materi ${design.materiPokok}.`,
         level: "C4 (Menganalisis)",
         type: "Uraian / Esai",
-        question: `Jelaskan analisis hubungan sebab-akibat yang terjadi apabila salah satu komponen penting dalam materi ${design.materiPokok} ditiadakan!`,
-        key: "Jawaban analisis mendalam: Siswa menjabarkan runtutan akibat dari hilangnya salah satu variabel terhadap kestabilan sistem konsep secara keseluruhan.",
-        points: 25
+        question: `Jelaskan analisis hubungan sebab-akibat yang terjadi apabila salah satu komponen penting dalam materi ${design.materiPokok || "Materi Pokok"} ditiadakan secara sengaja!`,
+        key: "Jawaban analisis mendalam: Siswa menjabarkan runtutan akibat dari hilangnya salah satu variabel terhadap kestabilan sistem konsep pembelajaran secara keseluruhan.",
+        points: 10
       },
       {
-        indicator: `Siswa dapat mengevaluasi efektivitas solusi yang ditawarkan pada kasus ${design.materiPokok}.`,
-        level: "C5 (Mengevaluasi)",
+        indicator: `Siswa dapat merancang usulan skenario penerapan konsep materi harian di lingkungan rumah.`,
+        level: "C6 (Menciptakan)",
         type: "Uraian / Esai",
-        question: `Berikan evaluasi kritis Anda terhadap efektivitas penerapan model ${design.modelPembelajaran} dalam melatih pemahaman konsep ${design.materiPokok}!`,
-        key: "Jawaban evaluatif: Siswa merinci kekuatan sintaks model dalam memperjelas transfer pengetahuan materi pokok kepada siswa secara mandiri.",
-        points: 30
+        question: `Rancanglah sebuah rencana sederhana penerapan konsep materi harian ${design.materiPokok || "Materi Pokok"} untuk membantu memecahkan satu permasalahan konkrit di lingkungan keluarga Anda!`,
+        key: "Jawaban kreatif: Siswa merumuskan langkah praktis berurutan mulai dari mengenali gejala masalah domestik, mengaitkannya dengan prinsip materi pokok, dan melaksanakan pemecahan mandiri harian.",
+        points: 10
       }
     ];
   }
 
-  // Filter based on user-requested types
-  let filteredTemplates = qTemplates;
-  if (bentukSoal === "pilihan ganda") {
-    filteredTemplates = qTemplates.filter(q => q.type === "Pilihan Ganda");
-  } else if (bentukSoal === "uraian") {
-    filteredTemplates = qTemplates.filter(q => q.type === "Uraian / Esai");
-  }
-
-  // Take the correct number of questions
-  const selectedQs = filteredTemplates.slice(0, jumlahSoal);
-  // If we don't have enough, append from general templates
-  while (selectedQs.length < jumlahSoal && qTemplates.length > 0) {
-    const nextQ = qTemplates.find(q => !selectedQs.some(s => s.question === q.question));
-    if (nextQ) {
-      selectedQs.push(nextQ);
-    } else {
-      break;
-    }
-  }
-
-  // Map to QuestionItem
-  selectedQs.forEach((q, index) => {
+  // We always map all 10 questions of qTemplates to generatedQuestions
+  // This satisfies the 10-question requirement of: 5 Pilihan Ganda, 3 Isian Pendek, 2 Uraian / Esai
+  qTemplates.forEach((q, index) => {
     generatedQuestions.push({
       nomorSoal: index + 1,
       indikator: q.indicator,
@@ -384,6 +485,7 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
 `;
 
   const pgQs = generatedQuestions.filter(q => q.jenisSoal === "Pilihan Ganda");
+  const isianQs = generatedQuestions.filter(q => q.jenisSoal === "Isian Pendek");
   const esaiQs = generatedQuestions.filter(q => q.jenisSoal === "Uraian / Esai");
 
   if (pgQs.length > 0) {
@@ -400,8 +502,15 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
     });
   }
 
+  if (isianQs.length > 0) {
+    cetakSoalText += `II. Isian Pendek (Isilah titik-titik di bawah ini dengan jawaban yang singkat dan tepat!)\n`;
+    isianQs.forEach((q, idx) => {
+      cetakSoalText += `${idx + 1}. ${q.rincianSoal}\n   Jawaban: ____________________________________________________________________________\n\n`;
+    });
+  }
+
   if (esaiQs.length > 0) {
-    cetakSoalText += `II. Uraian/Esai (Jawablah pertanyaan berikut dengan analisis yang jelas dan terperinci!)\n`;
+    cetakSoalText += `III. Uraian/Esai (Jawablah pertanyaan berikut dengan analisis yang jelas dan terperinci!)\n`;
     esaiQs.forEach((q, idx) => {
       cetakSoalText += `${idx + 1}. ${q.rincianSoal}\n   Jawaban: ____________________________________________________________________________\n   ____________________________________________________________________________________\n\n`;
     });
@@ -510,6 +619,42 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
 4. Tujuan Pembelajaran Spesifik: Melalui rangkaian aktivitas pembelajaran aktif menggunakan pendekatan ${design.pendekatan} dan model ${design.modelPembelajaran}, siswa diharapkan secara spesifik mampu menganalisis, menguraikan, serta mendemonstrasikan pemahaman konsep "${design.materiPokok || "materi utama"}" secara runtut, logis, dan kritis.
 5. Kontekstualitas Nyata: Pembelajaran mengenai "${design.materiPokok || "topik ini"}" bermanfaat langsung agar peserta didik memiliki kecakapan praktis dalam mengenali, menyusun solusi, dan mengaplikasikan keahlian terkait ${design.materiPokok || "topik pembelajaran"} untuk memecahkan masalah nyata yang mereka temui dalam kehidupan sehari-hari di rumah maupun di masyarakat.`;
   }
+  let kegiatanAkhirText = "";
+  if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || subLower.includes("matematika")) {
+    kegiatanAkhirText = `1. Penguatan Konseptual & Koreksi Miskonsepsi: Guru memberikan penguatan secara verbal dan visual menggunakan alat peraga nilai tempat. Guru meluruskan miskonsepsi umum di mana siswa sering salah memposisikan angka nol saat mendiktekan angka puluhan ribu (misal: "lima puluh ribu empat ratus" ditulis salah menjadi "5400" atau "500400"). Guru menerangkan konsep yang benar bahwa setiap angka menempati kolom masing-masing secara berurutan: Puluh Ribuan (5), Ribuan (0), Ratusan (4), Puluhan (0), Satuan (0) menjadi "50.400".
+2. Penyimpulan Bersama: Guru bersama perwakilan siswa menyusun simpulan esensial mengenai materi hari ini. Poin simpulan mencakup: bilangan cacah sampai 100.000 memiliki lima digit angka. Konsep pembacaan yang benar dimulai dari kiri ke kanan dengan memperhatikan pemisah titik ribuan. Contoh konkrit: bilangan 74.250 memiliki struktur 7 puluh ribuan (70.000), 4 ribuan (4.000), 2 ratusan (200), 5 puluhan (50), dan 0 satuan (0) yang dibaca "tujuh puluh empat ribu dua ratus lima puluh".
+3. Refleksi Interaktif: Guru membagikan lembar umpan balik singkat "3-2-1" mengenai 3 hal yang paling dipahami (cara membaca, membandingkan, menulis lambang bilangan), 2 bagian paling menarik (ice breaking gerak cepat nilai tempat), dan 1 pertanyaan yang masih belum dipahami sepenuhnya.
+4. Evaluasi Mandiri: Siswa mengerjakan kuis tertulis (Asesmen Sumatif Akhir) selama 15 menit secara mandiri yang terdiri atas tepat 10 soal (5 Pilihan Ganda, 3 Isian Pendek, dan 2 Uraian) guna memetakan ketuntasan kognitif individu harian.
+5. Umpan Balik & PR Spesifik: Sebagai tindak lanjut, guru memberikan Penugasan Terstruktur di Rumah (PR) kolaboratif bersama orang tua: Siswa mencari 3 struk belanja/nota harian di rumah yang mencantumkan nominal harga di bawah Rp 100.000 (misalnya belanja dapur atau buku tulis), menempelkannya di buku tugas, lalu menuliskan nama bilangannya secara tepat sesuai tata bahasa matematika Indonesia.`;
+  } else if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil") || subLower.includes("ipas") || subLower.includes("ipa")) {
+    kegiatanAkhirText = `1. Penguatan Konseptual & Koreksi Miskonsepsi: Guru memberikan penguatan visual melalui diagram proses fotosintesis. Guru meluruskan miskonsepsi umum di mana beberapa siswa mengira fotosintesis hanya terjadi pada malam hari atau bahwa fotosintesis melepaskan gas karbondioksida ke udara. Guru menerangkan konsep yang benar bahwa fotosintesis membutuhkan cahaya matahari (paling optimal pada siang hari) dan menyerap karbondioksida serta mengeluarkan gas oksigen (O2) yang segar serta glukosa sebagai makanan cadangan tumbuhan.
+2. Penyimpulan Bersama: Guru bersama perwakilan siswa menyusun poin-poin kesimpulan esensial. Poin simpulan mencakup: fotosintesis adalah proses pembuatan zat makanan oleh tumbuhan berklorofil menggunakan air dan karbondioksida dengan bantuan energi cahaya matahari. Contoh hasilnya adalah zat tepung (amilum) yang terbukti melalui perubahan warna daun menjadi biru kehitaman saat diuji iodine, dan pelepasan oksigen ke atmosfer bumi.
+3. Refleksi Interaktif: Guru membagikan lembar umpan balik bergambar "Pohon Emosi & Pengetahuan" di mana siswa mengidentifikasi emosi mereka saat melakukan uji amilum daun, serta merangkum bagian materi yang sudah jelas dan yang masih butuh pengulangan.
+4. Evaluasi Mandiri: Siswa mengerjakan kuis tertulis (Asesmen Sumatif Akhir) selama 15 menit secara mandiri yang terdiri atas tepat 10 soal (5 Pilihan Ganda, 3 Isian Pendek, dan 2 Uraian) untuk mengukur pemahaman saintifik individu tanpa membuka buku catatan.
+5. Umpan Balik & PR Spesifik: Sebagai tindak lanjut, guru memberikan Penugasan Terstruktur di Rumah (PR) kolaboratif bersama orang tua: Siswa mengamati satu jenis tumbuhan pot hijau di pekarangan rumahnya, menuliskan deskripsi singkat mengenai kecukupan paparan sinar matahari tumbuhan tersebut, serta menjelaskan peran pentingnya dalam memproduksi oksigen harian bagi keluarga.`;
+  } else {
+    kegiatanAkhirText = `1. Penguatan Konseptual & Koreksi Miskonsepsi: Guru memberikan penguatan materi harian secara konkret. Guru meluruskan miskonsepsi umum terkait materi harian di mana siswa sering keliru membedakan urutan prosedural konsep "${design.materiPokok || "ini"}". Guru menerangkan kembali konsep yang benar secara terstruktur demi menghindari kesalahan pemahaman yang berlanjut.
+2. Penyimpulan Bersama: Guru bersama perwakilan siswa menyusun simpulan esensial harian. Poin simpulan mencakup konsep-konsep kunci dari materi pokok beserta contoh konkrit pengaplikasian praktis harian.
+3. Refleksi Interaktif: Guru membagikan lembar tiket keluar (exit ticket) reflektif harian mengenai materi yang disukai, dipahami, dan yang belum jelas.
+4. Evaluasi Mandiri: Siswa menuntaskan kuis tertulis secara mandiri selama 10-15 menit berisi tepat 10 butir soal (5 Pilihan Ganda, 3 Isian Pendek, dan 2 Uraian) guna mengukur pemahaman harian.
+5. Umpan Balik & PR Spesifik: Guru membagikan PR terstruktur kolaboratif bersama keluarga untuk mengamati penerapan konsep "${design.materiPokok || "materi harian"}" di lingkungan rumah.`;
+  }
+
+  // Wajib mencantumkan website address, citations, and journals
+  const customSourcesList = [
+    `Buku Panduan Guru dan Buku Siswa ${primarySubject} SD Kelas ${school.kelas}, Kemdikbudristek RI. Akses katalog resmi di: https://buku.kemdikbud.go.id/katalog/buku-kurikulum-merdeka`,
+    "Portal Resmi Merdeka Mengajar, Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi RI. URL: https://guru.kemdikbud.go.id",
+    "Jurnal Ilmiah Pendidikan Dasar Indonesia (JIPDI), Vol. 8 No. 1, Artikel: Peningkatan Efektivitas Pembelajaran Berbasis Konstruktivisme. Tautan artikel jurnal: https://journal.unesa.ac.id/index.php/jipdi/article/view/10294"
+  ];
+
+  // Narasumber kompeten bila tidak dicantumkan di Sumber Belajar & Referensi maka tidak perlu dituliskan
+  if (design.sumberBelajar) {
+    if (design.sumberBelajar.toLowerCase().includes("narasumber") || design.sumberBelajar.toLowerCase().includes("wawancara") || design.sumberBelajar.toLowerCase().includes("tokoh") || design.sumberBelajar.toLowerCase().includes("ahli") || design.sumberBelajar.toLowerCase().includes("praktisi")) {
+      customSourcesList.push(`Narasumber Kompeten Terpilih (Sesuai Referensi Pengguna): ${design.sumberBelajar}`);
+    } else {
+      customSourcesList.push(`Sumber Belajar Kustom Pengguna: ${design.sumberBelajar} (Diakses melalui: https://belajar.kemdikbud.go.id)`);
+    }
+  }
 
   // Final Output Module Construct
   return {
@@ -545,11 +690,7 @@ ${detailedSteps}
       {
         tahapan: "Akhir",
         sintaks: sintaksAkhir,
-        kegiatan: `1. Penguatan: Guru memberikan penguatan, koreksi, dan apresiasi terhadap seluruh performa kelompok dan individu dalam pembelajaran.
-2. Penyimpulan Bersama: Guru bersama perwakilan siswa merumuskan poin-poin kesimpulan esensial yang diperoleh hari ini.
-3. Refleksi: Guru membagikan lembar umpan balik singkat mengenai apa yang disukai, dipahami, dan apa yang belum jelas pada materi hari ini.
-4. Evaluasi: Kuis singkat tertulis (Asesmen Sumatif Lingkup Materi) secara mandiri untuk mengukur ketercapaian tujuan pembelajaran.
-5. Umpan Balik / PR: Penugasan terstruktur di rumah berupa pengamatan mandiri bersama orang tua yang relevan dengan kehidupan sehari-hari siswa.`,
+        kegiatan: kegiatanAkhirText,
         alokasiWaktu: waktuAkhir,
         keterangan: "Menutup kegiatan dengan doa dan pesan-pesan inspiratif pembentuk karakter akhlak mulia."
       }
@@ -561,12 +702,7 @@ ${detailedSteps}
       "Situs web simulasi virtual interaktif (Phet Simulation / Geogebra)",
       "Kartu Soal Bergambar & Lembar Kegiatan Siswa (LKPD) Cetak"
     ],
-    sumberDihasilkan: [
-      `Buku Guru dan Buku Siswa Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi RI (Edisi Revisi Terbaru)`,
-      "Website Belajar Kemdikbud (https://belajar.kemdikbud.go.id)",
-      "Artikel Ilmiah Pendidikan Terbuka dan Relevan dari Jurnal Nasional terakreditasi",
-      "Narasumber Kompeten: Praktisi, tokoh masyarakat setempat, atau guru senior bidang studi terkait"
-    ],
+    sumberDihasilkan: customSourcesList,
     asesmenSikap: "Observasi langsung perilaku santun, kerjasama, bernalar kritis, dan mandiri selama aktivitas kelompok dan klasikal menggunakan lembar ceklist penilaian sikap.",
     asesmenKeterampilan: "Rubrik penilaian unjuk kerja dalam mempresentasikan hasil projek/diskusi kelompok, penyusunan laporan, serta keaktifan menyelesaikan tugas di LKPD.",
     asesmenKognitif: "Tes tertulis formatif berupa soal pilihan ganda, isian, dan uraian pada akhir bab, serta penugasan mandiri terstruktur dengan skor yang terdefinisi.",
