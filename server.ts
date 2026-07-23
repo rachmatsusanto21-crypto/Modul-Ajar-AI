@@ -118,6 +118,82 @@ app.get("/api/gemini/status", (req, res) => {
   });
 });
 
+app.all("/api/gemini/test", async (req, res) => {
+  const customApiKey = req.body?.customApiKey || (req.query?.customApiKey as string);
+  const keyToUse = customApiKey || process.env.GEMINI_API_KEY;
+
+  if (!keyToUse || keyToUse === "DUMMY_KEY" || keyToUse === "MY_GEMINI_API_KEY") {
+    return res.json({
+      connected: false,
+      hasKey: false,
+      reason: "MISSING_API_KEY",
+      message: "Kunci API (API Key) Gemini belum dimasukkan. Silakan masukkan Kunci API Gemini Anda di menu Pengaturan Aplikasi."
+    });
+  }
+
+  const candidateModels = [
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
+    "gemini-1.5-flash-8b",
+    "gemini-2.5-flash"
+  ];
+  let modelErrors: Record<string, string> = {};
+  let lastError: any = null;
+
+  for (const modelName of candidateModels) {
+    try {
+      const ai = new GoogleGenAI({ apiKey: keyToUse });
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: "Tes koneksi API Google Gemini. Jawab satu kata: OK.",
+        config: { temperature: 0.1 }
+      });
+
+      return res.json({
+        connected: true,
+        hasKey: true,
+        model: modelName,
+        responseText: response.text?.trim(),
+        message: `BERHASIL: Aplikasi terhubung secara live ke layanan Google Gemini API (${modelName})!`
+      });
+    } catch (error: any) {
+      lastError = error;
+      modelErrors[modelName] = error.message || String(error);
+      console.warn(`[Gemini Test] Model ${modelName} failed:`, error.message);
+    }
+  }
+
+  const allErrCombined = Object.values(modelErrors).join(" ");
+  let reason = "UNKNOWN_ERROR";
+  let messageExplanation = "Gagal terhubung ke layanan Google Gemini API.";
+
+  if (allErrCombined.includes("429") || allErrCombined.toLowerCase().includes("quota") || allErrCombined.toLowerCase().includes("resource_exhausted") || allErrCombined.toLowerCase().includes("limit")) {
+    reason = "QUOTA_EXCEEDED";
+    messageExplanation = "Koneksi ke Google Gemini BERHASIL terhubung, namun batas kuota panggilan gratis (Free Tier Rate Limit HTTP 429) pada Kunci API saat ini sedang terlampaui di server Google.";
+  } else if (allErrCombined.includes("400") || allErrCombined.toLowerCase().includes("api key not valid") || allErrCombined.toLowerCase().includes("invalid")) {
+    reason = "INVALID_API_KEY";
+    messageExplanation = "Kunci API (API Key) yang dimasukkan tidak valid atau format penulisan kunci salah/terpotong.";
+  } else if (allErrCombined.includes("403") || allErrCombined.toLowerCase().includes("permission") || allErrCombined.toLowerCase().includes("forbidden")) {
+    reason = "PERMISSION_DENIED";
+    messageExplanation = "Kunci API ditolak oleh Google. Pastikan Generative Language API telah diaktifkan pada konsol Google Cloud/AI Studio.";
+  } else if (allErrCombined.includes("503") || allErrCombined.toLowerCase().includes("unavailable") || allErrCombined.toLowerCase().includes("overloaded")) {
+    reason = "SERVICE_UNAVAILABLE";
+    messageExplanation = "Server Google Gemini sedang mengalami lonjakan beban tinggi (High Demand / 503) secara sementara di pusat data Google.";
+  } else if (allErrCombined.includes("404") || allErrCombined.toLowerCase().includes("not found")) {
+    reason = "MODEL_NOT_FOUND";
+    messageExplanation = "Nama model Gemini tidak ditemukan atau tidak tersedia untuk kunci API ini.";
+  }
+
+  return res.json({
+    connected: false,
+    hasKey: true,
+    reason,
+    modelErrors,
+    rawError: allErrCombined,
+    message: messageExplanation
+  });
+});
+
 app.post("/api/generate", async (req, res) => {
   const { prompt, provider, customApiKey, userEmail } = req.body;
 
@@ -144,24 +220,22 @@ app.post("/api/generate", async (req, res) => {
     });
 
     // Map the requested provider to standard, valid model and system instruction
-    let modelName = "gemini-2.5-flash";
+    let modelName = "gemini-2.0-flash";
     let systemInstruction = `Anda adalah asisten AI profesional untuk guru di Indonesia. Anda melayani guru dengan akun: ${activeEmail}. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara lengkap, presisi, kreatif, mendalam, dan sesuai konteks.`;
 
-    if (provider === "gemini-3.5-flash") {
-      modelName = "gemini-2.5-flash";
+    if (provider === "gemini-3.5-flash" || provider === "gemini-2.0-flash" || provider === "gemini-2.5-flash") {
+      modelName = "gemini-2.0-flash";
       systemInstruction = `Anda adalah Gemini Flash, asisten AI kognitif yang dirancang oleh Google. Anda melayani guru dengan akun: ${activeEmail}. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara sangat lengkap, detail, kreatif, mendalam, dan presisi tinggi sesuai instruksi guru.`;
     } else if (provider === "claude-3.5-sonnet") {
-      modelName = "gemini-2.5-flash";
+      modelName = "gemini-2.0-flash";
       systemInstruction = `You are Claude 3.5 Sonnet, a state-of-the-art AI model developed by Anthropic. You are authenticated under ${activeEmail}. You are highly praised for your exceptional writing, structured organization, and advanced pedagogical reasoning. Generate a highly detailed, professional, and comprehensive Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian, meticulously structured, without shortcuts or placeholders, exactly matching the teacher's parameters.`;
-    } else if (provider === "gemini-2.5-pro") {
-      modelName = "gemini-2.5-pro";
-    } else if (provider === "gemini-2.0-flash" || provider === "gemini-2.5-flash") {
-      modelName = "gemini-2.5-flash";
+    } else if (provider === "gemini-2.5-pro" || provider === "gemini-1.5-pro") {
+      modelName = "gemini-1.5-pro";
     } else if (provider === "deepseek-r1-free") {
-      modelName = "gemini-2.5-flash";
+      modelName = "gemini-2.0-flash";
       systemInstruction = `You are DeepSeek-R1, an advanced AI model developed by DeepSeek that excels in deep reasoning and systematic analysis. You are authenticated under ${activeEmail}. Always start your response with a thinking process wrapped inside a <think>...</think> block. In the thinking block, analyze the educational goals, curriculum, and structure of the lesson plan. After the thinking block, output a highly detailed, professional Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian matching the prompt requirements.`;
     } else if (provider === "llama3-free") {
-      modelName = "gemini-2.5-flash";
+      modelName = "gemini-2.0-flash";
       systemInstruction = `You are Meta Llama 3, a state-of-the-art open large language model developed by Meta. You are authenticated under ${activeEmail}. Generate a highly comprehensive, detailed Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian with rich pedagogical explanations, creative classroom activities, and robust assessments.`;
     }
 
@@ -170,36 +244,34 @@ app.post("/api/generate", async (req, res) => {
     let switched = false;
     let message = `Konten berhasil dibuat menggunakan ${provider} (Terotentikasi via ${activeEmail})`;
 
-    try {
-      console.log(`[Google Gemini] Attempting generation using model: ${modelName}`);
-      response = await ai.models.generateContent({
-        model: modelName,
-        contents: prompt,
-        config: {
-          systemInstruction: systemInstruction,
-          temperature: (provider === "deepseek-r1-free" || provider === "claude-3.5-sonnet") ? 0.6 : 1.0,
-        }
-      });
-    } catch (innerError: any) {
-      // If primary model fails (503/429/quota/unvailable), auto-fallback to gemini-2.5-flash
-      if (modelName !== "gemini-2.5-flash") {
-        console.warn(`[Google Gemini] Model ${modelName} failed. Auto-falling back to gemini-2.5-flash...`, innerError.message);
-        modelName = "gemini-2.5-flash";
-        usedProvider = `${provider} failed -> gemini-2.5-flash (Fallback Otomatis)`;
-        switched = true;
-        message = `Penyedia ${provider} mengalami limitasi. Sistem otomatis mengalihkan ke ${usedProvider} yang lebih stabil. (Terotentikasi via ${activeEmail})`;
-        
+    const primaryModels = [modelName, "gemini-1.5-flash", "gemini-2.0-flash"];
+    let lastGenError: any = null;
+
+    for (const modelToTry of primaryModels) {
+      try {
+        console.log(`[Google Gemini] Attempting generation using model: ${modelToTry}`);
         response = await ai.models.generateContent({
-          model: modelName,
+          model: modelToTry,
           contents: prompt,
           config: {
             systemInstruction: systemInstruction,
-            temperature: 1.0,
+            temperature: (provider === "deepseek-r1-free" || provider === "claude-3.5-sonnet") ? 0.6 : 1.0,
           }
         });
-      } else {
-        throw innerError;
+        if (modelToTry !== modelName) {
+          usedProvider = `${provider} -> ${modelToTry}`;
+          switched = true;
+          message = `Model dialihkan ke ${modelToTry} agar pembuatan modul berjalan stabil.`;
+        }
+        break; // Successfully generated!
+      } catch (innerError: any) {
+        lastGenError = innerError;
+        console.warn(`[Google Gemini] Model ${modelToTry} failed:`, innerError.message);
       }
+    }
+
+    if (!response && lastGenError) {
+      throw lastGenError;
     }
 
     return res.json({
