@@ -652,6 +652,34 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
     }
   };
 
+  const handleDeleteModule = (id: string) => {
+    const target = modules.find(m => m.id === id);
+    const updated = modules.filter(m => m.id !== id);
+    setModules(updated);
+    if (selectedModule?.id === id) {
+      setSelectedModule(updated.length > 0 ? updated[0] : null);
+    }
+    localStorage.setItem("rpp_modules", JSON.stringify(updated));
+    if (target) {
+      addDriveLog(`Hapus Berkas: Berkas "${target.title}" berhasil dihapus dari Google Drive.`);
+    }
+    pushCloudSync(updated);
+  };
+
+  const handleDeleteSubfolder = (subjectName: string) => {
+    const updated = modules.filter(m => {
+      const primarySub = m.subject.namaMataPelajaran.split(";")[0].trim();
+      return primarySub !== subjectName;
+    });
+    setModules(updated);
+    if (selectedModule && selectedModule.subject.namaMataPelajaran.split(";")[0].trim() === subjectName) {
+      setSelectedModule(updated.length > 0 ? updated[0] : null);
+    }
+    localStorage.setItem("rpp_modules", JSON.stringify(updated));
+    addDriveLog(`Hapus Folder: Folder pelajaran /${subjectName}/ dan seluruh berkas di dalamnya berhasil dihapus.`);
+    pushCloudSync(updated);
+  };
+
   return (
     <div className={`min-h-screen font-sans flex flex-col ${
       settings.theme === "dark" ? "bg-mesh-dark text-slate-100" : "bg-mesh-light text-slate-800"
@@ -818,6 +846,8 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
                   onToggleConnection={handleToggleGoogleDrive}
                   onUpdateFolderId={(id) => setSettings(prev => ({ ...prev, driveFolderId: id }))}
                   onClearSimulatedFiles={handleClearSimulatedFiles}
+                  onDeleteModule={handleDeleteModule}
+                  onDeleteSubfolder={handleDeleteSubfolder}
                   theme={settings.theme}
                 />
               </div>

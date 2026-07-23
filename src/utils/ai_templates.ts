@@ -284,7 +284,7 @@ Referensi & Daftar Rujukan:
     options?: { A: string; B: string; C: string; D: string };
   }[] = [];
 
-  if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || subLower.includes("matematika")) {
+  if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || matLower.includes("puluh ribu") || matLower.includes("ratus ribu")) {
     qTemplates = [
       {
         indicator: "Siswa dapat menentukan lambang bilangan dari nama bilangan cacah sampai 100.000 yang disajikan.",
@@ -397,7 +397,7 @@ Referensi & Daftar Rujukan:
         points: 10
       }
     ];
-  } else if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil") || subLower.includes("ipas") || subLower.includes("ipa")) {
+  } else if (matLower.includes("fotosintesis") || matLower.includes("daun") || matLower.includes("tumbuhan") || matLower.includes("klorofil")) {
     qTemplates = [
       {
         indicator: "Siswa dapat menyebutkan zat hijau daun yang krusial dalam menyerap energi matahari.",
@@ -511,116 +511,119 @@ Referensi & Daftar Rujukan:
       }
     ];
   } else {
-    // Generik fallbacks
+    // Universal Dynamic Generator matching exact custom materiPokok
+    const topic = design.materiPokok || "Materi Pokok";
+    const subjName = primarySubject || "Pelajaran";
+    
     qTemplates = [
       {
-        indicator: `Siswa dapat mendefinisikan prinsip dasar materi pokok ${design.materiPokok}.`,
+        indicator: `Siswa dapat mengidentifikasi definisi dan konsep dasar dari materi ${topic}.`,
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
-        question: `Manakah dari pernyataan berikut yang mendefinisikan konsep utama dari ${design.materiPokok || "Materi Pokok"} secara tepat?`,
+        question: `Pernyataan berikut yang paling tepat menjelaskan konsep utama dari materi "${topic}" dalam mata pelajaran ${subjName} adalah...`,
         options: {
-          A: `Definisi operasional teoretis yang selaras dengan konsep ${design.materiPokok || "materi"}`,
-          B: `Pernyataan acak yang tidak berkaitan dengan ${design.materiPokok || "materi"}`,
-          C: `Rumus umum tanpa penerapan pada ${design.materiPokok || "materi"}`,
-          D: `Pendapat subjektif tanpa bukti ilmiah`
+          A: `Pemahaman dan penerapan prinsip utama ${topic} secara tepat dan logis`,
+          B: `Pengetahuan acak yang tidak berkaitan dengan ${topic}`,
+          C: `Rumus umum tanpa penerapan konkrit pada ${topic}`,
+          D: `Pendapat subjektif tanpa dasar ilmiah`
         },
-        key: "A. Definisi operasional teoretis yang selaras dengan standar akademis nasional.",
+        key: `A. Pemahaman dan penerapan prinsip utama ${topic} secara tepat dan logis`,
         points: 10
       },
       {
-        indicator: `Siswa dapat memahami komponen pembentuk materi ${design.materiPokok}.`,
+        indicator: `Siswa dapat menganalisis elemen atau komponen pembentuk dari materi ${topic}.`,
         level: "C2 (Memahami)",
         type: "Pilihan Ganda",
-        question: `Berikut ini yang merupakan elemen pendukung utama dalam mewujudkan konsep ${design.materiPokok || "Materi Pokok"} adalah...`,
+        question: `Berikut ini yang merupakan elemen pendukung utama dalam mewujudkan pemahaman konsep "${topic}" adalah...`,
         options: {
-          A: `Unsur abiotik tanpa kaitan dengan ${design.materiPokok || "materi"}`,
-          B: `Kolaborasi elemen pendukung dan interaksi konseptual ${design.materiPokok || "materi"}`,
-          C: `Hambatan eksternal yang merusak sistem`,
-          D: `Variabel tidak terstruktur`
+          A: `Faktor pengganggu yang tidak relevan dengan ${topic}`,
+          B: `Interaksi komponen-komponen utama yang membangun keutuhan materi ${topic}`,
+          C: `Istilah luar yang merusak pemahaman`,
+          D: `Variabel acak yang tidak dapat diukur`
         },
-        key: "B. Kolaborasi unsur biotik dan interaksi konseptual berkelanjutan harian.",
+        key: `B. Interaksi komponen-komponen utama yang membangun keutuhan materi ${topic}`,
         points: 10
       },
       {
-        indicator: `Siswa dapat mendemonstrasikan penyelesaian kasus terkait ${design.materiPokok}.`,
+        indicator: `Siswa dapat menerapkan konsep ${topic} untuk menyelesaikan tantangan harian.`,
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
-        question: `Ketika diberikan tantangan praktis mengenai ${design.materiPokok || "Materi Pokok"}, langkah pertama yang logis dilakukan adalah...`,
+        question: `Dalam situasi kehidupan sehari-hari, penerapan praktis dari prinsip materi "${topic}" dapat ditunjukkan dengan...`,
         options: {
-          A: `Mengabaikan gejala awal masalah`,
-          B: `Langsung mengambil kesimpulan tanpa data`,
-          C: `Melakukan observasi karakteristik objek dan merencanakan tindakan ${design.materiPokok || "materi"}`,
-          D: `Meninggalkan tugas kelompok`
+          A: `Mengabaikan prosedur kerja yang sudah dipelajari`,
+          B: `Menyerahkan penyelesaian masalah kepada orang lain`,
+          C: `Menggunakan konsep ${topic} untuk menganalisis dan menyelesaikan masalah secara terstruktur`,
+          D: `Mengambil keputusan secara asal-asalan`
         },
-        key: "C. Melakukan observasi karakteristik objek dan menyusun perencanaan tindakan harian.",
+        key: `C. Menggunakan konsep ${topic} untuk menganalisis dan menyelesaikan masalah secara terstruktur`,
         points: 10
       },
       {
-        indicator: `Siswa dapat mengidentifikasi tujuan utama materi ${design.materiPokok}.`,
-        level: "C1 (Mengingat)",
+        indicator: `Siswa dapat menentukan karakteristik khas yang membedakan materi ${topic}.`,
+        level: "C2 (Memahami)",
         type: "Pilihan Ganda",
-        question: `Tujuan fundamental dari pengkajian terstruktur terhadap materi ${design.materiPokok || "Materi Pokok"} di kelas adalah...`,
+        question: `Ciri khas utama yang membedakan materi "${topic}" dari materi pembelajaran lainnya terletak pada...`,
         options: {
-          A: `Menghafal istilah tanpa memahami konteks`,
-          B: `Mengejar nilai ujian semata`,
-          C: `Menghindari tugas berbasis projek`,
-          D: `Menumbuhkan penalaran kritis aktif siswa terhadap fenomena ${design.materiPokok || "materi"}`
+          A: `Keterikatan langsung antara prinsip ${topic} dengan fenomena nyata di lingkungan`,
+          B: `Penggunaan istilah asing yang sulit dipahami`,
+          C: `Ketiadaan struktur belajar yang jelas`,
+          D: `Ketidakpastian hasil pengamatan`
         },
-        key: "D. Menumbuhkan penalaran kritis aktif siswa terhadap lingkungan riil.",
+        key: `A. Keterikatan langsung antara prinsip ${topic} dengan fenomena nyata di lingkungan`,
         points: 10
       },
       {
-        indicator: `Siswa dapat mengidentifikasi pengaplikasian mandiri materi ${design.materiPokok}.`,
+        indicator: `Siswa dapat mengurutkan langkah-langkah sistematis dalam mengkaji materi ${topic}.`,
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
-        question: `Manakah di bawah ini yang merupakan perwujudan profil pelajar mandiri dalam mengkaji ${design.materiPokok || "Materi Pokok"}?`,
+        question: `Urutan langkah kerja yang logis dalam mempelajari dan mempraktikkan materi "${topic}" adalah...`,
         options: {
-          A: `Mampu menyelesaikan tugas latihan pemahaman ${design.materiPokok || "materi"} secara mandiri dan tekun`,
-          B: `Bergantung sepenuhnya pada instruksi teman sekelompok`,
-          C: `Tidak mengumpulkan laporan tepat waktu`,
-          D: `Menolak berpartisipasi dalam diskusi`
+          A: `Kesimpulan -> Observasi -> Pelaksanaan`,
+          B: `Identifikasi masalah -> Analisis komponen ${topic} -> Penerapan dan evaluasi`,
+          C: `Pelaksanaan tanpa perencanaan awal`,
+          D: `Evaluasi akhir sebelum pengamatan`
         },
-        key: "A. Mampu menyelesaikan uji latihan pemahaman mandiri secara tekun dan berani.",
+        key: `B. Identifikasi masalah -> Analisis komponen ${topic} -> Penerapan dan evaluasi`,
         points: 10
       },
       {
-        indicator: `Siswa dapat melengkapi istilah kunci pada pembahasan materi harian.`,
-        level: "C2 (Memahami)",
-        type: "Isian Pendek",
-        question: `Pendekatan terstruktur yang digunakan guru harian dalam menjembatani penyampaian materi ${design.materiPokok || "Materi Pokok"} adalah pendekatan...`,
-        key: "Pendekatan Saintifik Kontekstual",
-        points: 10
-      },
-      {
-        indicator: `Siswa dapat menentukan jenis media yang paling relevan untuk materi harian.`,
-        level: "C2 (Memahami)",
-        type: "Isian Pendek",
-        question: `Situs web penunjang visualisasi virtual yang disiapkan oleh guru untuk simulasi konsep harian adalah...`,
-        key: "Simulasi Virtual / Alat Peraga Konkrit",
-        points: 10
-      },
-      {
-        indicator: `Siswa dapat menyebutkan jenis evaluasi akhir di ujung pembelajaran harian.`,
+        indicator: `Siswa dapat menyebutkan istilah kunci utama dalam pembahasan materi ${topic}.`,
         level: "C1 (Mengingat)",
         type: "Isian Pendek",
-        question: `Jenis asesmen mandiri tertulis di akhir pembelajaran harian untuk memetakan capaian pemahaman siswa dinamakan asesmen...`,
-        key: "Asesmen Sumatif Lingkup Materi",
+        question: `Istilah kunci atau konsep sentral yang menjadi fokus pembahasan pada materi "${topic}" adalah...`,
+        key: `${topic}`,
         points: 10
       },
       {
-        indicator: `Siswa dapat menganalisis hubungan timbal balik variabel pada materi ${design.materiPokok}.`,
+        indicator: `Siswa dapat mengidentifikasi alat/media penunjang dalam mempelajari ${topic}.`,
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: `Alat peraga atau media konkrit yang paling tepat digunakan untuk memvisualisasikan materi "${topic}" adalah...`,
+        key: `Alat peraga konkrit / Media simulasi digital ${topic}`,
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat menentukan manfaat utama penguasaan materi ${topic}.`,
+        level: "C2 (Memahami)",
+        type: "Isian Pendek",
+        question: `Manfaat utama yang diperoleh siswa setelah berhasil menguasai materi "${topic}" adalah...`,
+        key: `Kemampuan memecahkan masalah kontekstual berbasis ${topic}`,
+        points: 10
+      },
+      {
+        indicator: `Siswa dapat menganalisis hubungan sebab-akibat terkait materi ${topic}.`,
         level: "C4 (Menganalisis)",
         type: "Uraian / Esai",
-        question: `Jelaskan analisis hubungan sebab-akibat yang terjadi apabila salah satu komponen penting dalam materi ${design.materiPokok || "Materi Pokok"} ditiadakan secara sengaja!`,
-        key: "Jawaban analisis mendalam: Siswa menjabarkan runtutan akibat dari hilangnya salah satu variabel terhadap kestabilan sistem konsep pembelajaran secara keseluruhan.",
+        question: `Jelaskan analisis hubungan sebab-akibat yang terjadi apabila salah satu komponen utama dalam materi "${topic}" tidak dilaksanakan atau ditiadakan!`,
+        key: `Jawaban analitis: Siswa menguraikan runtutan akibat dari hilangnya variabel utama pada ${topic} terhadap kelancaran proses dan keseimbangan sistem secara terperinci.`,
         points: 10
       },
       {
-        indicator: `Siswa dapat merancang usulan skenario penerapan konsep materi harian di lingkungan rumah.`,
-        level: "C6 (Menciptakan)",
+        indicator: `Siswa dapat merancang usulan solusi kreatif berbasis materi ${topic}.`,
+        level: "C5 (Mengevaluasi)",
         type: "Uraian / Esai",
-        question: `Rancanglah sebuah rencana sederhana penerapan konsep materi harian ${design.materiPokok || "Materi Pokok"} untuk membantu memecahkan satu permasalahan konkrit di lingkungan keluarga Anda!`,
-        key: "Jawaban kreatif: Siswa merumuskan langkah praktis berurutan mulai dari mengenali gejala masalah domestik, mengaitkannya dengan prinsip materi pokok, dan melaksanakan pemecahan mandiri harian.",
+        question: `Rancanglah sebuah rencana aksi sederhana penerapan konsep materi "${topic}" untuk membantu menyelesaikan sebuah permasalahan di lingkungan sekolah atau rumah Anda!`,
+        key: `Jawaban evaluatif-kreatif: Siswa merumuskan langkah praktis berurutan mulai dari mengenali gejala masalah, mengaitkannya dengan prinsip ${topic}, dan melaksanakan pemecahan masalah secara mandiri.`,
         points: 10
       }
     ];
@@ -692,12 +695,18 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
   const lampiranCetakSoal = cetakSoalText.trim();
 
   const lampiranKisiKisiSoal = generatedQuestions;
-  const lampiranKartuSoal = generatedQuestions.map(q => ({
-    nomorSoal: q.nomorSoal,
-    kisiKisiRef: `Indikator No ${q.nomorSoal} (${q.levelKognitif.split(" ")[0]})`,
-    soal: q.rincianSoal,
-    kunci: q.jenisSoal === "Pilihan Ganda" ? q.kunciJawaban.substring(0, 1) : q.kunciJawaban
-  }));
+  const lampiranKartuSoal = generatedQuestions.map(q => {
+    let fullSoalText = q.rincianSoal;
+    if (q.options) {
+      fullSoalText += `\n\nPilihan Jawaban:\nA. ${q.options.A}\nB. ${q.options.B}\nC. ${q.options.C}\nD. ${q.options.D}`;
+    }
+    return {
+      nomorSoal: q.nomorSoal,
+      kisiKisiRef: `Indikator No ${q.nomorSoal} (${q.levelKognitif.split(" ")[0]})`,
+      soal: fullSoalText,
+      kunci: q.kunciJawaban
+    };
+  });
 
   // Dynamic values for LKPD Group Activity Table matching the material
   let objekA = "Variabel Kontrol A";

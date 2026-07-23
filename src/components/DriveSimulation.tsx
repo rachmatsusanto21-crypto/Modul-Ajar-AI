@@ -10,6 +10,8 @@ interface DriveSimulationProps {
   onToggleConnection: () => void;
   onUpdateFolderId: (id: string) => void;
   onClearSimulatedFiles: () => void;
+  onDeleteModule?: (id: string) => void;
+  onDeleteSubfolder?: (subjectName: string) => void;
   theme: "light" | "dark";
 }
 
@@ -19,6 +21,8 @@ export default function DriveSimulation({
   onToggleConnection,
   onUpdateFolderId,
   onClearSimulatedFiles,
+  onDeleteModule,
+  onDeleteSubfolder,
   theme
 }: DriveSimulationProps) {
   const [showConfig, setShowConfig] = useState(false);
@@ -91,9 +95,21 @@ export default function DriveSimulation({
       )}
 
       {/* Directory Folder Tree Preview */}
-      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">
-        Struktur Folder Google Drive Anda:
-      </span>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+          Struktur Folder Google Drive Anda:
+        </span>
+        {modules.length > 0 && (
+          <button
+            onClick={onClearSimulatedFiles}
+            className="text-[10px] text-rose-500 hover:text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 font-medium cursor-pointer transition-colors"
+            title="Hapus seluruh berkas tersimpan di Google Drive"
+          >
+            <Trash2 size={11} />
+            Hapus Semua File
+          </button>
+        )}
+      </div>
 
       <div className={`flex-1 rounded-xl p-4 overflow-y-auto ${bgTree} border border-slate-200/50 dark:border-slate-800 font-mono text-[11px] leading-relaxed`}>
         
@@ -108,35 +124,71 @@ export default function DriveSimulation({
           
           {/* Main App Folder */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-blue-600 font-bold">
-              <Folder size={13} />
-              <span>/{mainFolder}</span>
-              <span className="text-[9px] bg-blue-500/10 text-blue-600 px-1 rounded">Folder Utama</span>
+            <div className="flex items-center justify-between text-blue-600 font-bold">
+              <div className="flex items-center gap-2">
+                <Folder size={13} />
+                <span>/{mainFolder}</span>
+                <span className="text-[9px] bg-blue-500/10 text-blue-600 px-1 rounded">Folder Utama</span>
+              </div>
             </div>
 
             {/* Dynamic Subfolders */}
             <div className="pl-4 border-l border-slate-300 dark:border-slate-800 space-y-2">
               {Object.keys(subfolders).length > 0 ? (
                 Object.entries(subfolders).map(([subj, docs]) => (
-                  <div key={subj} className="space-y-1">
-                    <div className="flex items-center gap-1.5 text-blue-500 font-semibold">
-                      <Folder size={12} />
-                      <span>{subj}</span>
-                      <span className="text-[8px] bg-blue-500/10 text-blue-500 px-1 rounded">({docs.length} Berkas)</span>
+                  <div key={subj} className="space-y-1 group/folder">
+                    <div className="flex items-center justify-between text-blue-500 font-semibold">
+                      <div className="flex items-center gap-1.5">
+                        <Folder size={12} />
+                        <span>{subj}</span>
+                        <span className="text-[8px] bg-blue-500/10 text-blue-500 px-1 rounded">({docs.length} Berkas)</span>
+                      </div>
+                      
+                      {/* Subfolder Delete Option */}
+                      {onDeleteSubfolder && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm(`Apakah Anda yakin ingin menghapus seluruh berkas (${docs.length}) dalam folder pelajaran "${subj}"?`)) {
+                              onDeleteSubfolder(subj);
+                            }
+                          }}
+                          className="opacity-80 group-hover/folder:opacity-100 p-1 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 rounded transition-all cursor-pointer text-[9px] flex items-center gap-1"
+                          title={`Hapus folder pelajaran "${subj}" beserta ${docs.length} berkas`}
+                        >
+                          <Trash2 size={11} />
+                          <span className="hidden sm:inline">Hapus Folder</span>
+                        </button>
+                      )}
                     </div>
 
                     {/* Files inside subfolder */}
                     <div className="pl-4 border-l border-slate-300 dark:border-slate-800 space-y-1">
                       {docs.map(doc => (
-                        <div key={doc.id} className="flex items-center justify-between group hover:bg-white/5 p-1 rounded transition-colors text-slate-300">
-                          <div className="flex items-center gap-1.5 truncate">
-                            <FileText size={11} className="text-slate-400" />
+                        <div key={doc.id} className="flex items-center justify-between group/file hover:bg-slate-200/50 dark:hover:bg-slate-800/50 p-1 px-1.5 rounded transition-colors text-slate-700 dark:text-slate-300">
+                          <div className="flex items-center gap-1.5 truncate pr-2">
+                            <FileText size={11} className="text-blue-500 shrink-0" />
                             <span className="truncate">{doc.title}</span>
                           </div>
-                          <div className="flex items-center gap-1 text-[8px] text-slate-400">
-                            <span>.docx</span>
-                            <span>|</span>
-                            <span>.pdf</span>
+                          
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[8px] text-slate-400 hidden sm:inline">.docx | .pdf</span>
+                            
+                            {/* Individual File Delete Option */}
+                            {onDeleteModule && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (confirm(`Apakah Anda yakin ingin menghapus berkas "${doc.title}" dari Google Drive?`)) {
+                                    onDeleteModule(doc.id);
+                                  }
+                                }}
+                                className="p-1 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 rounded transition-colors cursor-pointer"
+                                title={`Hapus berkas "${doc.title}"`}
+                              >
+                                <Trash2 size={11} />
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}
