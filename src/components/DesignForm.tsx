@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { LearningDesign } from "../types";
 import { 
-  Sparkles, Save, CircleStop, RefreshCw, Layers, Crosshair, HelpCircle 
+  Sparkles, Save, CircleStop, RefreshCw, Layers, Crosshair, HelpCircle, CheckCircle2, AlertCircle, Loader2, Wifi
 } from "lucide-react";
 
 interface DesignFormProps {
@@ -42,6 +43,37 @@ export default function DesignForm({
   onChangeCustomApiKey,
   geminiActive = null
 }: DesignFormProps) {
+  const [testingApi, setTestingApi] = useState(false);
+  const [testResult, setTestResult] = useState<{
+    connected?: boolean;
+    hasKey?: boolean;
+    reason?: string;
+    model?: string;
+    message?: string;
+    rawError?: string;
+  } | null>(null);
+
+  const handleTestConnection = async () => {
+    setTestingApi(true);
+    setTestResult(null);
+    try {
+      const res = await fetch("/api/gemini/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customApiKey })
+      });
+      const data = await res.json();
+      setTestResult(data);
+    } catch (err: any) {
+      setTestResult({
+        connected: false,
+        message: "Gagal menghubungi endpoint tes server. Pastikan aplikasi berjalan."
+      });
+    } finally {
+      setTestingApi(false);
+    }
+  };
+
   const cardBg = theme === "dark" ? "bg-slate-900/60 border-slate-800" : "bg-white border-slate-200/80 shadow-sm";
   const labelColor = theme === "dark" ? "text-slate-300" : "text-slate-600";
   const inputBg = theme === "dark" ? "bg-slate-950/40 border-slate-800 text-slate-100" : "bg-slate-50/50 border-slate-200 text-slate-800";
@@ -324,6 +356,55 @@ export default function DesignForm({
                 </span>
               )}
             </div>
+            <div className="mt-2 flex items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={handleTestConnection}
+                disabled={testingApi}
+                className="flex items-center gap-1.5 px-3 py-1 text-[10px] font-bold rounded-lg bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 border border-teal-500/20 transition-all cursor-pointer disabled:opacity-50"
+              >
+                {testingApi ? (
+                  <Loader2 size={12} className="animate-spin" />
+                ) : (
+                  <Wifi size={12} />
+                )}
+                {testingApi ? "Memeriksa Koneksi Google..." : "Uji Koneksi Gemini AI Live"}
+              </button>
+            </div>
+
+            {testResult && (
+              <div className={`mt-2.5 p-3 rounded-xl border text-xs space-y-1.5 ${
+                testResult.connected
+                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300"
+                  : testResult.reason === "QUOTA_EXCEEDED"
+                    ? "bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300"
+                    : "bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-300"
+              }`}>
+                <div className="flex items-start gap-2">
+                  {testResult.connected ? (
+                    <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertCircle size={16} className={testResult.reason === "QUOTA_EXCEEDED" ? "text-amber-500 shrink-0 mt-0.5" : "text-rose-500 shrink-0 mt-0.5"} />
+                  )}
+                  <div className="space-y-1">
+                    <p className="font-bold text-[11px] leading-tight">
+                      {testResult.message}
+                    </p>
+                    {testResult.reason === "QUOTA_EXCEEDED" && (
+                      <p className="text-[10px] leading-normal opacity-90">
+                        <strong>💡 Solusi Kuota Exceeded (HTTP 429):</strong> Kunci API terverifikasi valid, namun kuota gratis Google Gemini untuk kunci/proyek ini telah mencapai batas harian (Requests Per Day = 0). Silakan buat API Key baru gratis di <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="underline font-bold">aistudio.google.com</a> dengan akun Google pribadi/lain, atau tunggu reset kuota harian dari Google.
+                      </p>
+                    )}
+                    {testResult.reason === "INVALID_API_KEY" && (
+                      <p className="text-[10px] leading-normal opacity-90">
+                        <strong>💡 Solusi API Key Invalid:</strong> Pastikan Anda menyalin Kunci API dari Google AI Studio secara utuh tanpa ada karakter yang terpotong.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <p className="text-[9.5px] text-slate-500 dark:text-slate-400 mt-1.5 font-sans leading-relaxed">
               <strong>💡 Panduan Akses:</strong> Akun email belajar.id ({currentUserEmail || "rachmatsusanto21"}) Anda terhubung untuk sinkronisasi berkas otomatis ke Google Drive & Google Docs Anda. Untuk menggunakan kecerdasan Gemini AI asli (non-simulasi), silakan masukkan <strong>Kunci API Gemini</strong> di atas, atau minta Admin Sekolah Anda untuk menyetel variabel sistem <code>GEMINI_API_KEY</code> di server.
             </p>
