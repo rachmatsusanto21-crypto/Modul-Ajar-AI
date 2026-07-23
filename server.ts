@@ -148,10 +148,10 @@ app.post("/api/generate", async (req, res) => {
     let systemInstruction = `Anda adalah asisten AI profesional untuk guru di Indonesia. Anda melayani guru dengan akun: ${activeEmail}. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara lengkap, presisi, kreatif, mendalam, dan sesuai konteks.`;
 
     if (provider === "gemini-3.5-flash") {
-      modelName = "gemini-3.5-flash";
-      systemInstruction = `Anda adalah Gemini 3.5 Flash, asisten AI kognitif tercanggih yang dirancang oleh Google. Anda melayani guru dengan akun: ${activeEmail}. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara sangat lengkap, detail, kreatif, mendalam, dan presisi tinggi sesuai instruksi guru.`;
+      modelName = "gemini-2.5-flash";
+      systemInstruction = `Anda adalah Gemini Flash, asisten AI kognitif yang dirancang oleh Google. Anda melayani guru dengan akun: ${activeEmail}. Tugas Anda adalah membantu menyusun Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) Kurikulum Merdeka secara sangat lengkap, detail, kreatif, mendalam, dan presisi tinggi sesuai instruksi guru.`;
     } else if (provider === "claude-3.5-sonnet") {
-      modelName = "gemini-3.5-flash";
+      modelName = "gemini-2.5-flash";
       systemInstruction = `You are Claude 3.5 Sonnet, a state-of-the-art AI model developed by Anthropic. You are authenticated under ${activeEmail}. You are highly praised for your exceptional writing, structured organization, and advanced pedagogical reasoning. Generate a highly detailed, professional, and comprehensive Kurikulum Merdeka Lesson Plan (Modul Ajar/RPP) in Indonesian, meticulously structured, without shortcuts or placeholders, exactly matching the teacher's parameters.`;
     } else if (provider === "gemini-2.5-pro") {
       modelName = "gemini-2.5-pro";
@@ -181,8 +181,8 @@ app.post("/api/generate", async (req, res) => {
         }
       });
     } catch (innerError: any) {
-      // If advanced models fail (quota/not enabled), auto-fallback to gemini-2.5-flash
-      if (modelName === "gemini-3.5-flash" || modelName === "gemini-2.5-pro") {
+      // If primary model fails (503/429/quota/unvailable), auto-fallback to gemini-2.5-flash
+      if (modelName !== "gemini-2.5-flash") {
         console.warn(`[Google Gemini] Model ${modelName} failed. Auto-falling back to gemini-2.5-flash...`, innerError.message);
         modelName = "gemini-2.5-flash";
         usedProvider = `${provider} failed -> gemini-2.5-flash (Fallback Otomatis)`;
