@@ -7,6 +7,14 @@ export interface User {
   nip?: string;
 }
 
+export interface Student {
+  id: string;
+  nis?: string;
+  namaSiswa: string;
+  jenisKelamin: "L" | "P";
+  catatan?: string;
+}
+
 export interface AppSettings {
   apiProvider: string;
   customApiKey: string;
@@ -35,6 +43,7 @@ export interface SchoolIdentity {
   namaKota: string;
   tanggalPembuatan: string;
   jumlahSiswa: number;
+  students?: Student[];
 }
 
 export interface SubjectIdentity {

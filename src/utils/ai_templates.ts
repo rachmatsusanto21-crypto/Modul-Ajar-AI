@@ -1,5 +1,62 @@
 import { GeneratedModule, SchoolIdentity, SubjectIdentity, LearningDesign } from "../types";
 
+// Helper function to get specific question for PjBL/PBL Tahap 1
+function getMateriQuestion(materiPokok: string): string {
+  const m = (materiPokok || "").toLowerCase();
+  if (m.includes("bilangan") || m.includes("cacah") || m.includes("angka") || m.includes("lambang")) {
+    return "Bagaimana cara membaca dan menuliskan nama serta lambang bilangan puluhan ribu dengan benar?";
+  }
+  if (m.includes("fotosintesis") || m.includes("daun") || m.includes("tumbuhan") || m.includes("klorofil")) {
+    return "Bahan apa saja yang diperlukan tumbuhan untuk fotosintesis dan bagaimana proses terjadinya?";
+  }
+  if (m.includes("ekosistem") || m.includes("lingkungan") || m.includes("rantai makanan")) {
+    return "Bagaimana rantai makanan dan interaksi antar makhluk hidup menjaga keseimbangan ekosistem?";
+  }
+  if (m.includes("gaya") || m.includes("gesek") || m.includes("magnet") || m.includes("gravitasi")) {
+    return "Bagaimana pengaruh gaya gesek dan gravitasi terhadap pergerakan benda dalam kehidupan sehari-hari?";
+  }
+  return `Bagaimana cara memecahkan masalah kontekstual dan mengaplikasikan prinsip dasar ${materiPokok || "topik pembelajaran"} secara tepat?`;
+}
+
+// Helper function to get specific tools/media for PjBL/PBL Tahap 2
+function getMateriTools(materiPokok: string, mediaBelajar?: string): string {
+  const m = (materiPokok || "").toLowerCase();
+  if (m.includes("bilangan") || m.includes("cacah") || m.includes("angka") || m.includes("lambang")) {
+    return "kartu bilangan puluhan ribu, papan nilai tempat, poster lipat angka, dan lembar hitung";
+  }
+  if (m.includes("fotosintesis") || m.includes("daun") || m.includes("tumbuhan") || m.includes("klorofil")) {
+    return "pot tanaman hias berdaun hijau, kantong plastik bening, larutan iodine/lugol, pipet tetes, dan lembar pengamatan daun";
+  }
+  if (m.includes("ekosistem") || m.includes("lingkungan") || m.includes("rantai makanan")) {
+    return "kartu bergambar komponen biotik/abiotik, papan jaring-jaring makanan, dan kertas karton poster";
+  }
+  if (m.includes("gaya") || m.includes("gesek") || m.includes("magnet") || m.includes("gravitasi")) {
+    return "mobil-mobilan mainan, neraca pegas, alas papan licin & kasar, serta lembar ukur";
+  }
+  if (mediaBelajar && mediaBelajar.trim().length > 0) {
+    return mediaBelajar;
+  }
+  return `kartu peraga ${materiPokok || "materi"}, papan pameran 3D, dan lembar observasi`;
+}
+
+// Helper function to get specific Klasikal opening activity
+function getKlasikalText(materiPokok: string): string {
+  const m = (materiPokok || "").toLowerCase();
+  if (m.includes("bilangan") || m.includes("cacah") || m.includes("angka") || m.includes("lambang")) {
+    return "1. Klasikal: Guru menyajikan sebuah kartu bilangan puluhan ribu (misalnya angka 45.210) kemudian meminta siswa menebak cara membaca dan menuliskannya secara interaktif.";
+  }
+  if (m.includes("fotosintesis") || m.includes("daun") || m.includes("tumbuhan") || m.includes("klorofil")) {
+    return "1. Klasikal: Guru menyajikan sebuah pot tanaman hias berdaun hijau segar dan tanaman layu dari tempat gelap, kemudian meminta siswa menebak bagaimana daun memproses makanan dengan bantuan cahaya matahari.";
+  }
+  if (m.includes("ekosistem") || m.includes("lingkungan") || m.includes("rantai makanan")) {
+    return "1. Klasikal: Guru menyajikan gambar/foto ekosistem persawahan yang penuh dengan padi, belalang, dan katak, lalu meminta siswa menebak apa yang terjadi jika belalang punah.";
+  }
+  if (m.includes("gaya") || m.includes("gesek") || m.includes("magnet") || m.includes("gravitasi")) {
+    return "1. Klasikal: Guru memperagakan dorongan dan tarikan pada mobil-mobilan mainan di permukaan meja yang licin dan kasar, lalu meminta siswa menebak gaya yang bekerja.";
+  }
+  return `1. Klasikal: Guru menyajikan media peraga/gambar/simulasi interaktif yang menampilkan contoh kasus riil terkait "${materiPokok || "materi pokok"}", kemudian meminta siswa menebak dan mendiskusikan fenomena tersebut secara interaktif.`;
+}
+
 // Dynamic content helper to generate rich, precise pedagogical Indonesian text
 export function generateMockLessonPlan(
   school: SchoolIdentity,
@@ -66,19 +123,24 @@ export function generateMockLessonPlan(
   const waktuInti = Math.round(totalMinutes * 0.70) + " menit";
   const waktuAkhir = Math.round(totalMinutes * 0.15) + " menit";
 
-  // Create list of students
-  const studentNames = [
+  // Create list of students from school.students or default
+  const defaultStudentNames = [
     "Achmad Fauzi", "Aisyah Putri", "Anindya Lestari", "Bagus Tri", "Citra Kirana",
     "Dewi Lestari", "Eko Prasetyo", "Fajar Hidayat", "Gita Gutawa", "Hadi Wijaya",
     "Indah Permata", "Joko Susilo", "Kartika Sari", "Lukman Hakim", "Megawati",
     "Naufal Abdi", "Putu Gede", "Rina Marlina", "Siti Aminah", "Taufik Hidayat",
     "Umar Faruq", "Vina Panduwinata", "Wawan Setiawan", "Yusuf Habibie", "Zaskia Adya"
   ];
-  const listAssessmentSiswa = Array.from({ length: Math.min(school.jumlahSiswa, 25) }, (_, i) => ({
-    namaSiswa: studentNames[i] || `Siswa Kelas ${i + 1}`,
-    nilaiSikap: ["Amat Baik (SB)", "Baik (B)", "Cukup (C)"][Math.floor(Math.random() * 3)],
-    nilaiKeterampilan: Math.floor(Math.random() * 16 + 85).toString(),
-    nilaiKognitif: Math.floor(Math.random() * 21 + 80).toString(),
+  
+  const studentSource = (school.students && school.students.length > 0)
+    ? school.students.map(s => s.namaSiswa)
+    : defaultStudentNames;
+
+  const listAssessmentSiswa = Array.from({ length: Math.min(school.jumlahSiswa, studentSource.length) }, (_, i) => ({
+    namaSiswa: studentSource[i] || `Siswa Kelas ${i + 1}`,
+    nilaiSikap: ["Amat Baik (SB)", "Baik (B)", "Cukup (C)"][i % 3],
+    nilaiKeterampilan: (85 + (i % 15)).toString(),
+    nilaiKognitif: (80 + ((i * 3) % 20)).toString(),
   }));
 
   // Glosarium KBBI yang terkait secara langsung dengan materi pembelajaran
@@ -144,31 +206,34 @@ Referensi & Daftar Rujukan:
   `.trim();
 
   // Detail step-by-step syntax implementation based on selected learning model
+  const materiQuestion = getMateriQuestion(design.materiPokok);
+  const materiTools = getMateriTools(design.materiPokok, design.mediaBelajar);
+
   let detailedSteps = "";
   if (design.modelPembelajaran === "PjBL") {
-    detailedSteps = `   a. Tahap 1 (Penentuan Pertanyaan Mendasar): Guru mengajukan masalah kontekstual mengenai "${design.materiPokok || "materi pokok"}". Siswa menganalisis isu tersebut dan merumuskan pertanyaan mendasar yang memicu rasa ingin tahu untuk dirancang solusinya.
-   b. Tahap 2 (Mendesain Perencanaan Projek): Siswa berkolaborasi dalam kelompok heterogen merancang rencana kerja pembuatan projek/solusi. Mereka merencanakan aturan main kelompok, pembagian tugas, alat/bahan pendukung (seperti "${design.mediaBelajar || "alat peraga sederhana"}"), dan langkah-langkah penyelesaian projek.
+    detailedSteps = `   a. Tahap 1 (Penentuan Pertanyaan Mendasar): Guru mengajukan masalah kontekstual mengenai "${design.materiPokok || "materi pokok"}" dengan pertanyaan mendasar: "${materiQuestion}". Siswa menganalisis isu tersebut dan merumuskan pertanyaan mendasar yang memicu rasa ingin tahu untuk dirancang solusinya.
+   b. Tahap 2 (Mendesain Perencanaan Projek): Siswa berkolaborasi dalam kelompok heterogen merancang rencana kerja pembuatan projek/solusi. Mereka merencanakan aturan main kelompok, pembagian tugas, alat/bahan pendukung (seperti ${materiTools}), dan langkah-langkah penyelesaian projek.
    c. Tahap 3 (Menyusun Jadwal Pembuatan): Siswa secara kritis berdiskusi menyusun garis waktu (timeline) pengerjaan projek secara detail, menetapkan batas akhir pengerjaan, serta pembagian target capaian harian kelompok di bawah bimbingan guru.
    d. Tahap 4 (Memonitor Keberajuan Projek): Siswa aktif membuat projek atau melaksanakan investigasi mendalam sesuai jadwal yang disepakati. Guru berkeliling melakukan pemantauan intensif, membimbing penyelesaian kendala teknis, serta memastikan semua siswa berpartisipasi aktif.
    e. Tahap 5 (Menguji Hasil): Kelompok melakukan uji coba akhir terhadap projek/karya yang telah diselesaikan untuk mengukur kelayakan fungsinya. Guru memantau unjuk kerja siswa dan mencatat hasil evaluasi produk sebagai dasar penilaian ketercapaian kompetensi.
    f. Tahap 6 (Evaluasi Pengalaman Belajar): Setiap kelompok menyajikan dan mendemonstrasikan hasil karya projek mereka di hadapan kelas secara komunikatif. Siswa kelompok lain menyimak dengan saksama dan memberikan masukan konstruktif. Guru memberikan penguatan konsep esensial serta merefleksikan seluruh proses pembuatan projek bersama siswa.`;
   } else if (design.modelPembelajaran === "PBL") {
-    detailedSteps = `   a. Tahap 1 (Orientasi Siswa pada Masalah): Guru mempresentasikan kasus nyata dan menantang (ill-structured problem) yang terjadi di kehidupan sehari-hari terkait "${design.materiPokok || "materi pokok"}". Siswa mengamati, merumuskan pertanyaan kunci, serta menetapkan fokus masalah yang perlu dipecahkan berkelompok.
-   b. Tahap 2 (Mengorganisasi Siswa untuk Belajar): Siswa bergabung dalam kelompok heterogen. Guru membagikan LKPD, mendefinisikan tugas belajar secara spesifik, membimbing pembagian peran anggota kelompok, dan menyepakati rujukan pemecahan masalah.
+    detailedSteps = `   a. Tahap 1 (Orientasi Siswa pada Masalah): Guru mempresentasikan kasus nyata dan menantang terkait "${design.materiPokok || "materi pokok"}" dengan pertanyaan kunci: "${materiQuestion}". Siswa mengamati, merumuskan pertanyaan kunci, serta menetapkan fokus masalah yang perlu dipecahkan berkelompok.
+   b. Tahap 2 (Mengorganisasi Siswa untuk Belajar): Siswa bergabung dalam kelompok heterogen. Guru membagikan LKPD, mendefinisikan tugas belajar secara spesifik, membimbing pembagian peran anggota kelompok, dan menyepakati rujukan pemecahan masalah dengan media pendukung (seperti ${materiTools}).
    c. Tahap 3 (Membimbing Penyelidikan Individu/Kelompok): Siswa melakukan investigasi mendalam, mencari informasi rujukan dari "${design.sumberBelajar || "buku pelajaran dan bahan ajar digital"}", mengumpulkan data hasil eksperimen/observasi, dan mendiskusikannya secara kritis dengan anggota kelompok untuk merumuskan draf solusi.
    d. Tahap 4 (Mengembangkan dan Menyajikan Hasil Karya): Siswa menyatukan data hasil penyelidikan untuk merumuskan solusi terbaik. Mereka menuangkannya ke dalam laporan terstruktur, peta konsep, atau poster visual, lalu mempresentasikan hasil karyanya di depan kelas secara percaya diri.
    e. Tahap 5 (Menganalisis & Mengevaluasi Proses): Kelompok lain menanyakan hal baru, menanggapi, atau menyempurnakan solusi yang ditawarkan. Guru mengonfirmasi kebenaran konsep ilmiah, meluruskan miskonsepsi, mereview langkah-langkah pemecahan masalah, dan memberikan umpan balik evaluatif.`;
   } else if (design.modelPembelajaran === "Discovery") {
-    detailedSteps = `   a. Tahap 1 (Pemberian Rangsangan / Stimulation): Guru memberikan stimulus visual berupa gambar, demonstrasi eksperimen menarik, atau benda nyata mengenai "${design.materiPokok || "topik materi"}" tanpa penjelasan awal untuk memicu rasa ingin tahu mendalam.
-   b. Tahap 2 (Pernyataan/Identifikasi Masalah / Problem Statement): Siswa mengidentifikasi sebanyak mungkin agenda pertanyaan/permasalahan dari stimulus tersebut. Siswa memilih masalah yang paling relevan dengan materi pokok untuk dirumuskan dalam bentuk hipotesis dugaan sementara.
+    detailedSteps = `   a. Tahap 1 (Pemberian Rangsangan / Stimulation): Guru memberikan stimulus visual berupa peragaan media ${materiTools} mengenai "${design.materiPokok || "topik materi"}" tanpa penjelasan awal untuk memicu rasa ingin tahu mendalam.
+   b. Tahap 2 (Pernyataan/Identifikasi Masalah / Problem Statement): Siswa mengidentifikasi sebanyak mungkin agenda pertanyaan dari stimulus tersebut, berfokus pada: "${materiQuestion}". Siswa merumuskannya dalam bentuk hipotesis dugaan sementara.
    c. Tahap 3 (Pengumpulan Data / Data Collection): Kelompok siswa melakukan pengumpulan data dengan membaca referensi literatur, melakukan eksperimen praktis, atau mengeksplorasi simulasi virtual untuk membuktikan kebenaran hipotesis mereka.
    d. Tahap 4 (Pengolahan Data / Data Processing): Siswa berdiskusi mengolah data hasil pengamatan, mengklasifikasikan pola, menghitung korelasi, dan menuliskannya ke dalam tabel analisis LKPD yang rapi.
    e. Tahap 5 (Pembuktian / Verification): Siswa melakukan verifikasi hasil olah data dengan mencocokkan teori resmi pada buku teks. Guru memberikan bimbingan untuk memastikan tidak terjadi miskonsepsi ilmiah.
    f. Tahap 6 (Menarik Kesimpulan / Generalization): Siswa bersama kelompok merumuskan kesimpulan umum/prinsip yang terbukti, mempresentasikannya, dan guru menyempurnakan kesimpulan akhir materi pembelajaran hari ini.`;
   } else if (design.modelPembelajaran === "Inquiry") {
-    detailedSteps = `   a. Tahap 1 (Orientasi Masalah & Merumuskan Pertanyaan): Guru memandu perhatian siswa pada fenomena alam/sosial yang ganjil terkait "${design.materiPokok || "materi pokok"}". Siswa menanya secara kritis dan merumuskan pertanyaan penyelidikan mandiri kelompok.
+    detailedSteps = `   a. Tahap 1 (Orientasi Masalah & Merumuskan Pertanyaan): Guru memandu perhatian siswa pada fenomena terkait "${design.materiPokok || "materi pokok"}" dengan pertanyaan penyelidikan: "${materiQuestion}". Siswa menanya secara kritis dan merumuskan pertanyaan penyelidikan mandiri kelompok.
    b. Tahap 2 (Merumuskan Hipotesis): Siswa secara cerdas bercurah pendapat untuk merumuskan jawaban sementara (hipotesis) terhadap pertanyaan riset yang telah ditetapkan sebelumnya.
-   c. Tahap 3 (Mengumpulkan Data / Eksperimen): Siswa merancang tata cara pengujian, menyiapkan alat peraga, menguji langsung, mencatat angka/kejadian objektif secara teliti dalam lembar observasi.
+   c. Tahap 3 (Mengumpulkan Data / Eksperimen): Siswa merancang tata cara pengujian menggunakan ${materiTools}, menguji langsung, dan mencatat angka/kejadian objektif secara teliti dalam lembar observasi.
    d. Tahap 4 (Menguji Hipotesis): Siswa mengomparasi data empiris lapangan dengan draf hipotesis awal. Mereka mendiskusikan keselarasan hasil uji untuk menerima atau menolak hipotesis awal.
    e. Tahap 5 (Merumuskan Kesimpulan & Refleksi): Setiap kelompok menyusun pernyataan ilmiah final, mengekspos hasil temuan di depan kelas, dan berefleksi atas seluruh keterampilan proses ilmiah yang sudah mereka lalui hari ini.`;
   }
@@ -205,10 +270,19 @@ Referensi & Daftar Rujukan:
     rincianSoal: string;
     kunciJawaban: string;
     poin: number;
+    options?: { A: string; B: string; C: string; D: string };
   }
 
   const generatedQuestions: QuestionItem[] = [];
-  let qTemplates: { indicator: string; level: string; type: "Pilihan Ganda" | "Isian Pendek" | "Uraian / Esai"; question: string; key: string; points: number }[] = [];
+  let qTemplates: { 
+    indicator: string; 
+    level: string; 
+    type: "Pilihan Ganda" | "Isian Pendek" | "Uraian / Esai"; 
+    question: string; 
+    key: string; 
+    points: number;
+    options?: { A: string; B: string; C: string; D: string };
+  }[] = [];
 
   if (matLower.includes("bilangan") || matLower.includes("cacah") || matLower.includes("angka") || subLower.includes("matematika")) {
     qTemplates = [
@@ -216,7 +290,13 @@ Referensi & Daftar Rujukan:
         indicator: "Siswa dapat menentukan lambang bilangan dari nama bilangan cacah sampai 100.000 yang disajikan.",
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
-        question: "Lambang bilangan dari 'tujuh puluh ¼ ribu dua ratus lima puluh' atau 'tujuh puluh empat ribu dua ratus lima puluh' yang tepat adalah...",
+        question: "Lambang bilangan dari 'tujuh puluh empat ribu dua ratus lima puluh' yang tepat adalah...",
+        options: {
+          A: "74.250",
+          B: "70.425",
+          C: "74.025",
+          D: "74.520"
+        },
         key: "A. 74.250 (Angka 7 menempati puluh ribuan, 4 ribuan, 2 ratusan, 5 puluhan, dan 0 satuan)",
         points: 10
       },
@@ -225,6 +305,12 @@ Referensi & Daftar Rujukan:
         level: "C2 (Memahami)",
         type: "Pilihan Ganda",
         question: "Pada lambang bilangan '50.400', nilai tempat yang dimiliki oleh angka '5' adalah...",
+        options: {
+          A: "Ratusan",
+          B: "Puluh Ribuan",
+          C: "Ribuan",
+          D: "Puluhan"
+        },
         key: "B. Puluh Ribuan (Angka 5 menempati puluh ribuan, bernilai 50.000)",
         points: 10
       },
@@ -233,6 +319,12 @@ Referensi & Daftar Rujukan:
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
         question: "Perbandingan yang benar antara bilangan '56.780' dan '56.870' di bawah ini adalah...",
+        options: {
+          A: "56.780 > 56.870",
+          B: "56.780 = 56.870",
+          C: "56.780 < 56.870",
+          D: "56.780 + 56.870 = 100.000"
+        },
         key: "C. 56.780 < 56.870 (Karena nilai ratusan 7 lebih kecil daripada ratusan 8)",
         points: 10
       },
@@ -241,6 +333,12 @@ Referensi & Daftar Rujukan:
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
         question: "Penulisan lambang uang dan nama bilangan dari nominal 'Rp 98.500' yang benar secara formal adalah...",
+        options: {
+          A: "Sembilan puluh delapan ribu lima ratus rupiah",
+          B: "Sembilan puluh delapan ratus rupiah",
+          C: "Delapan puluh sembilan ribu lima ratus rupiah",
+          D: "Sembilan belas ribu delapan ratus rupiah"
+        },
         key: "A. Sembilan puluh delapan ribu lima ratus rupiah",
         points: 10
       },
@@ -249,8 +347,14 @@ Referensi & Daftar Rujukan:
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
         question: "Urutan bilangan dari yang terkecil hingga terbesar untuk bilangan: 12.350, 12.530, dan 12.305 yang benar adalah...",
+        options: {
+          A: "12.530, 12.350, 12.305",
+          B: "12.305, 12.350, 12.530",
+          C: "12.350, 12.305, 12.530",
+          D: "12.305, 12.530, 12.350"
+        },
         key: "B. 12.305, 12.350, 12.530",
-         points: 10
+        points: 10
       },
       {
         indicator: "Siswa dapat melengkapi nilai tempat dari digit angka nol pada bilangan besar harian.",
@@ -300,6 +404,12 @@ Referensi & Daftar Rujukan:
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
         question: "Zat hijau pada daun tumbuhan yang berperan menangkap sinar matahari untuk fotosintesis disebut...",
+        options: {
+          A: "Stomata",
+          B: "Klorofil",
+          C: "Kloroplas",
+          D: "Amilum"
+        },
         key: "B. Klorofil",
         points: 10
       },
@@ -308,6 +418,12 @@ Referensi & Daftar Rujukan:
         level: "C2 (Memahami)",
         type: "Pilihan Ganda",
         question: "Bahan yang diperlukan tumbuhan untuk melakukan fotosintesis yang diserap melalui akar dan udara adalah...",
+        options: {
+          A: "Air dan Karbondioksida",
+          B: "Air dan Oksigen",
+          C: "Glukosa dan Nitrogen",
+          D: "Karbondioksida dan Oksigen"
+        },
         key: "A. Air dan Karbondioksida",
         points: 10
       },
@@ -316,7 +432,13 @@ Referensi & Daftar Rujukan:
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
         question: "Jika selembar daun ditutup kertas timah (alumunium foil) selama beberapa hari lalu ditetesi larutan iodine, bagian daun yang tertutup akan berwarna...",
-        key: "C. Pucat / tidak berubah gelap (karena tidak mengalami fotosintesis dan tidak menghasilkan amilum)",
+        options: {
+          A: "Biru kehitaman pekat",
+          B: "Hijau tua kebiruan",
+          C: "Pucat kekuningan (tidak berubah gelap)",
+          D: "Merah kecokelatan"
+        },
+        key: "C. Pucat kekuningan (tidak berubah gelap)",
         points: 10
       },
       {
@@ -324,6 +446,12 @@ Referensi & Daftar Rujukan:
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
         question: "Gas hasil akhir proses fotosintesis yang sangat bermanfaat bagi kelangsungan pernapasan manusia dan hewan adalah...",
+        options: {
+          A: "Karbondioksida",
+          B: "Nitrogen",
+          C: "Hidrogen",
+          D: "Oksigen"
+        },
         key: "D. Oksigen",
         points: 10
       },
@@ -332,6 +460,12 @@ Referensi & Daftar Rujukan:
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
         question: "Sumber energi alami paling utama yang menggerakkan seluruh proses fotosintesis pada tumbuhan hijau adalah...",
+        options: {
+          A: "Sinar Matahari",
+          B: "Lampu Neon",
+          C: "Pupuk Kompos",
+          D: "Panas Bumi"
+        },
         key: "A. Sinar Matahari",
         points: 10
       },
@@ -384,14 +518,26 @@ Referensi & Daftar Rujukan:
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
         question: `Manakah dari pernyataan berikut yang mendefinisikan konsep utama dari ${design.materiPokok || "Materi Pokok"} secara tepat?`,
+        options: {
+          A: `Definisi operasional teoretis yang selaras dengan konsep ${design.materiPokok || "materi"}`,
+          B: `Pernyataan acak yang tidak berkaitan dengan ${design.materiPokok || "materi"}`,
+          C: `Rumus umum tanpa penerapan pada ${design.materiPokok || "materi"}`,
+          D: `Pendapat subjektif tanpa bukti ilmiah`
+        },
         key: "A. Definisi operasional teoretis yang selaras dengan standar akademis nasional.",
-         points: 10
+        points: 10
       },
       {
         indicator: `Siswa dapat memahami komponen pembentuk materi ${design.materiPokok}.`,
         level: "C2 (Memahami)",
         type: "Pilihan Ganda",
         question: `Berikut ini yang merupakan elemen pendukung utama dalam mewujudkan konsep ${design.materiPokok || "Materi Pokok"} adalah...`,
+        options: {
+          A: `Unsur abiotik tanpa kaitan dengan ${design.materiPokok || "materi"}`,
+          B: `Kolaborasi elemen pendukung dan interaksi konseptual ${design.materiPokok || "materi"}`,
+          C: `Hambatan eksternal yang merusak sistem`,
+          D: `Variabel tidak terstruktur`
+        },
         key: "B. Kolaborasi unsur biotik dan interaksi konseptual berkelanjutan harian.",
         points: 10
       },
@@ -400,6 +546,12 @@ Referensi & Daftar Rujukan:
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
         question: `Ketika diberikan tantangan praktis mengenai ${design.materiPokok || "Materi Pokok"}, langkah pertama yang logis dilakukan adalah...`,
+        options: {
+          A: `Mengabaikan gejala awal masalah`,
+          B: `Langsung mengambil kesimpulan tanpa data`,
+          C: `Melakukan observasi karakteristik objek dan merencanakan tindakan ${design.materiPokok || "materi"}`,
+          D: `Meninggalkan tugas kelompok`
+        },
         key: "C. Melakukan observasi karakteristik objek dan menyusun perencanaan tindakan harian.",
         points: 10
       },
@@ -408,6 +560,12 @@ Referensi & Daftar Rujukan:
         level: "C1 (Mengingat)",
         type: "Pilihan Ganda",
         question: `Tujuan fundamental dari pengkajian terstruktur terhadap materi ${design.materiPokok || "Materi Pokok"} di kelas adalah...`,
+        options: {
+          A: `Menghafal istilah tanpa memahami konteks`,
+          B: `Mengejar nilai ujian semata`,
+          C: `Menghindari tugas berbasis projek`,
+          D: `Menumbuhkan penalaran kritis aktif siswa terhadap fenomena ${design.materiPokok || "materi"}`
+        },
         key: "D. Menumbuhkan penalaran kritis aktif siswa terhadap lingkungan riil.",
         points: 10
       },
@@ -416,6 +574,12 @@ Referensi & Daftar Rujukan:
         level: "C3 (Mengaplikasikan)",
         type: "Pilihan Ganda",
         question: `Manakah di bawah ini yang merupakan perwujudan profil pelajar mandiri dalam mengkaji ${design.materiPokok || "Materi Pokok"}?`,
+        options: {
+          A: `Mampu menyelesaikan tugas latihan pemahaman ${design.materiPokok || "materi"} secara mandiri dan tekun`,
+          B: `Bergantung sepenuhnya pada instruksi teman sekelompok`,
+          C: `Tidak mengumpulkan laporan tepat waktu`,
+          D: `Menolak berpartisipasi dalam diskusi`
+        },
         key: "A. Mampu menyelesaikan uji latihan pemahaman mandiri secara tekun dan berani.",
         points: 10
       },
@@ -463,7 +627,6 @@ Referensi & Daftar Rujukan:
   }
 
   // We always map all 10 questions of qTemplates to generatedQuestions
-  // This satisfies the 10-question requirement of: 5 Pilihan Ganda, 3 Isian Pendek, 2 Uraian / Esai
   qTemplates.forEach((q, index) => {
     generatedQuestions.push({
       nomorSoal: index + 1,
@@ -472,7 +635,8 @@ Referensi & Daftar Rujukan:
       jenisSoal: q.type,
       rincianSoal: q.question,
       kunciJawaban: q.key,
-      poin: q.points
+      poin: q.points,
+      options: q.options
     });
   });
 
@@ -491,13 +655,23 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
   if (pgQs.length > 0) {
     cetakSoalText += `I. Pilihan Ganda (Pilihlah salah satu jawaban yang paling tepat!)\n`;
     pgQs.forEach((q, idx) => {
-      const correctOptionLetter = q.kunciJawaban.substring(0, 1);
-      const optStr = q.kunciJawaban.substring(2);
-      let optA = "A. " + (correctOptionLetter === "A" ? optStr : "Opsi pengecoh alternatif A");
-      let optB = "B. " + (correctOptionLetter === "B" ? optStr : "Opsi pengecoh alternatif B");
-      let optC = "C. " + (correctOptionLetter === "C" ? optStr : "Opsi pengecoh alternatif C");
-      let optD = "D. " + (correctOptionLetter === "D" ? optStr : "Opsi pengecoh alternatif D");
-      
+      let optA = "";
+      let optB = "";
+      let optC = "";
+      let optD = "";
+      if (q.options) {
+        optA = `A. ${q.options.A}`;
+        optB = `B. ${q.options.B}`;
+        optC = `C. ${q.options.C}`;
+        optD = `D. ${q.options.D}`;
+      } else {
+        const correctOptionLetter = q.kunciJawaban.substring(0, 1);
+        const optStr = q.kunciJawaban.substring(2);
+        optA = "A. " + (correctOptionLetter === "A" ? optStr : "Opsi pengecoh alternatif A");
+        optB = "B. " + (correctOptionLetter === "B" ? optStr : "Opsi pengecoh alternatif B");
+        optC = "C. " + (correctOptionLetter === "C" ? optStr : "Opsi pengecoh alternatif C");
+        optD = "D. " + (correctOptionLetter === "D" ? optStr : "Opsi pengecoh alternatif D");
+      }
       cetakSoalText += `${idx + 1}. ${q.rincianSoal}\n   ${optA}\n   ${optB}\n   ${optC}\n   ${optD}\n\n`;
     });
   }
@@ -678,7 +852,7 @@ Hari/Tanggal: _____________________ | Nama Siswa: ____________________
       {
         tahapan: "Inti",
         sintaks: `${sintaksAwal} s/d ${sintaksInti2}`,
-        kegiatan: `1. Klasikal: Guru menyajikan multimedia/benda asli/simulasi digital interaktif mengenai materi pokok. Siswa menyimak penjelasan awal secara interaktif.
+        kegiatan: `${getKlasikalText(design.materiPokok)}
 2. Kelompok: Siswa dibagi dalam kelompok heterogen beranggotakan 4-5 orang. Guru membagikan LKPD (Lembar Kerja Peserta Didik) Projek/Masalah.
 3. Penerapan Sintaks Model Pembelajaran "${design.modelPembelajaran}" Secara Terperinci:
 ${detailedSteps}

@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import Sidebar from "./components/Sidebar";
 import IdentityForm from "./components/IdentityForm";
+import StudentTableSection from "./components/StudentTableSection";
 import DesignForm from "./components/DesignForm";
 import PreviewPanel from "./components/PreviewPanel";
 import DriveSimulation from "./components/DriveSimulation";
@@ -756,6 +757,15 @@ Pastikan seluruh generate sesuai dengan konteks sosiokultural sekolah di Indones
               onChangeSchool={(fields) => setSchool(prev => ({ ...prev, ...fields }))}
               onChangeSubject={(fields) => setSubject(prev => ({ ...prev, ...fields }))}
               theme={settings.theme}
+            />
+
+            <StudentTableSection
+              students={school.students || []}
+              onUpdateStudents={(students) => setSchool(prev => ({ ...prev, students, jumlahSiswa: students.length > 0 ? students.length : prev.jumlahSiswa }))}
+              jumlahSiswa={school.jumlahSiswa}
+              onUpdateJumlahSiswa={(num) => setSchool(prev => ({ ...prev, jumlahSiswa: num }))}
+              kelas={school.kelas}
+              namaSekolah={school.namaSekolah}
             />
           </div>
 
